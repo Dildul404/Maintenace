@@ -1,0 +1,167 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
+
+@theme {
+  /* Colors */
+  --color-heading: #111827;
+  --color-body: #374151;
+  --color-fg-brand: #3b82f6;
+  --color-fg-disabled: #9ca3af;
+  --color-fg-danger-strong: #b91c1c;
+
+  --color-neutral-primary-soft: #f9fafb;
+  --color-neutral-secondary-soft: #f3f4f6;
+  --color-neutral-secondary-medium: #e5e7eb;
+  --color-neutral-tertiary: #d1d5db;
+
+  --color-danger-soft: #fef2f2;
+  --color-danger-subtle: #fee2e2;
+
+  --color-default: #e5e7eb;
+  --color-default-medium: #d1d5db;
+
+  /* Border Radius */
+  --radius-base: 0.5rem;
+
+  /* Custom Utilities */
+  --spacing-4\.5: 1.125rem;
+  --border-width-1: 1px;
+
+  /* Fonts */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  /* slate */
+  --slate-50: #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
+
+  /* sky */
+  --sky-400: #38bdf8;
+  --sky-500: #0ea5e9;
+  --sky-600: #0284c7;
+
+  /* purple */
+  --purple-400: #a78bfa;
+  --purple-500: #8b5cf6;
+  --purple-600: #7c3aed;
+}
+
+@layer base {
+  body {
+    @apply font-sans text-body bg-white;
+  }
+}
+
+@layer utilities {
+
+  /* dashboard */
+
+  .gradient-bg {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+  }
+
+  .card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+
+  .security-shield {
+    background: linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* CONTOH PENGGUNAAN COLOR */
+  .bg-slate-500 {
+    background-color: var(--slate-500);
+  }
+
+  .text-sky-500 {
+    color: var(--sky-500);
+  }
+
+  .border-purple-600 {
+    border-color: var(--purple-600);
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Utility animation */
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-bounce-slow {
+    animation: bounce 2s infinite;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out;
+  }
+
+  /* OPTIONAL: kalau mau pulse & bounce tanpa Tailwind */
+  @keyframes pulse {
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  @keyframes bounce {
+
+    0%,
+    100% {
+      transform: translateY(-5%);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+
+    50% {
+      transform: translateY(0);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+  }
+}
