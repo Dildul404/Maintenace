@@ -3,6 +3,9 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
+// Deklarasi win di scope module agar bisa diakses oleh ipcMain
+let win
+
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -33,6 +36,9 @@ function createWindow() {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  // Simpan referensi ke variabel win
+  win = mainWindow
 }
 
 // This method will be called when Electron has finished
@@ -51,6 +57,13 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
+
+  // IPC navigasi: load halaman lain di renderer
+  ipcMain.on('navigate', (_event, page) => {
+    if (win) {
+      win.loadFile(join(__dirname, `../renderer/${page}.html`))
+    }
+  })
 
   createWindow()
 

@@ -1,0 +1,86 @@
+<div id="modal-tambah" class="fixed inset-0 z-50 hidden items-center justify-center">
+    <!-- Backdrop -->
+    <div id="modal-backdrop" class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"></div>
+
+    <!-- Modal Content -->
+    <div class="relative z-10 w-full max-w-lg mx-4 bg-white rounded-2xl shadow-2xl border border-gray-200 transform transition-all">
+      <!-- Header -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+        <h2 class="text-lg font-semibold text-slate-800">Tambah Data Laporan</h2>
+        <button id="btn-close-modal" class="w-8 h-8 flex items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors cursor-pointer">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Form -->
+      <form id="form-tambah" class="px-6 py-5 space-y-4">
+        <!-- Foto -->
+        <div>
+          <label for="input-foto" class="block text-sm font-medium text-gray-700 mb-1">Foto</label>
+          <div class="relative">
+            <input type="file" id="input-foto" accept="image/*"
+              class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 file:cursor-pointer cursor-pointer border border-gray-300 rounded-lg" />
+          </div>
+          <div id="preview-foto" class="mt-2 hidden">
+            <img id="img-preview" src="" alt="Preview" class="h-20 w-20 object-cover rounded-lg ring-2 ring-lime-200" />
+          </div>
+        </div>
+
+        <!-- Deskripsi -->
+        <div>
+          <label for="input-deskripsi" class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
+          <input type="text" id="input-judul" placeholder="Judul laporan"
+            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors mb-2" />
+          <textarea id="input-deskripsi" rows="3" placeholder="Detail kerusakan atau masalah..."
+            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors resize-none"></textarea>
+        </div>
+
+        <!-- Kategori -->
+        <div>
+          <label for="input-kategori" class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+          <select id="input-kategori"
+            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors bg-white">
+            <option value="" disabled selected>Pilih kategori</option>
+            <option value="pendingin">Pendingin</option>
+            <option value="plumbing">Plumbing</option>
+            <option value="elektrikal">Elektrikal</option>
+            <option value="sipil">Sipil</option>
+            <option value="lainnya">Lainnya</option>
+          </select>
+        </div>
+
+        <!-- Teknisi -->
+        <div>
+          <label for="input-teknisi" class="block text-sm font-medium text-gray-700 mb-1">Teknisi</label>
+          <input type="text" id="input-teknisi" placeholder="Nama teknisi yang ditugaskan"
+            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors" />
+        </div>
+
+        <!-- Status -->
+        <div>
+          <label for="input-status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+          <select id="input-status"
+            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors bg-white">
+            <option value="" disabled selected>Pilih status</option>
+            <option value="menunggu">Menunggu</option>
+            <option value="proses">Proses</option>
+            <option value="selesai">Selesai</option>
+          </select>
+        </div>
+      </form>
+
+      <!-- Footer -->
+      <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100">
+        <button id="btn-batal" type="button"
+          class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
+          Batal
+        </button>
+        <button id="btn-simpan" type="button"
+          class="px-5 py-2.5 text-sm font-medium text-white bg-indigo-500 rounded-lg hover:bg-indigo-600 transition-colors cursor-pointer">
+          Simpan
+        </button>
+      </div>
+    </div>
+  </div>

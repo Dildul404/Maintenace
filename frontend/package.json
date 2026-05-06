@@ -21,6 +21,7 @@
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
     "@tailwindcss/vite": "^4.2.4",
+    "axios": "^1.16.0",
     "flowbite": "^4.0.1",
     "tailwindcss": "^4.2.4"
   },

@@ -1,6 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
+/* Scan komponen yang di-load via fetch agar class-nya masuk ke CSS output */
+@source "../component/*.html";
+@source "../src/*.js";
+
 @theme {
   /* Colors */
   --color-heading: #111827;
@@ -58,6 +62,14 @@
     @apply font-sans text-body bg-white;
   }
 }
+
+/* body */
+
+#dasboard::-webkit-scrollbar {
+  display: none;
+}
+
+
 
 @layer utilities {
 
