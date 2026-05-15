@@ -1,17 +1,26 @@
-<!-- tabel -->
 <section class="mx-10">
-
+  
   <div>
     <header class="flex items-center justify-between">
       <h1 class="font-semibold text-2xl my-12">Daftar Laporan</h1>
       <button id="btn-tambah-data"
-        class="bg-indigo-500 cursor-pointer hover:bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center"><img
-          src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMTkgMTIuOTk4aC02djZoLTJ2LTZINXYtMmg2di02aDJ2Nmg2eiIvPjwvc3ZnPg=="
-          alt="" class="w-5 mr-2">Tambah Data</button>
+      class="bg-indigo-500 cursor-pointer hover:bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center"><img
+      src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMTkgMTIuOTk4aC02djZoLTJ2LTZINXYtMmg2di02aDJ2Nmg2eiIvPjwvc3ZnPg=="
+      alt="" class="w-5 mr-2">Tambah Data</button>
     </header>
   </div>
+  <!-- tabel -->
   <div id="tabel-daftar"></div>
 </section>
 
 <!-- Modal Popup Tambah Data -->
 <div id="form-popup"></div>
+
+<!-- Modal Konfirmasi -->
+<div id="confirmation-popup"></div>
+
+<!-- Container for alerts -->
+<div id="alert-container" class="fixed top-4 right-4 z-[60] flex flex-col gap-2 pointer-events-none"></div>
+
+<!-- Modal Detail Kerusakan -->
+<div id="detail-kerusakan"></div>

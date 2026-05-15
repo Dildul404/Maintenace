@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import axios from 'axios';
 
 // Deklarasi win di scope module agar bisa diakses oleh ipcMain
 let win
@@ -62,6 +63,50 @@ app.whenReady().then(() => {
   ipcMain.on('navigate', (_event, page) => {
     if (win) {
       win.loadFile(join(__dirname, `../renderer/${page}.html`))
+    }
+  })
+
+  // IPC laporan (Kirim data ke backend)
+  ipcMain.handle('send-laporan', async (event, data) => {
+    try {
+      const response = await axios.post('http://localhost:3000/laporan', data);
+      return { success: true, data: response.data };
+    } catch (error) {
+      console.error('Error sending laporan:', error.message);
+      return { success: false, error: error.message };
+    }
+  })
+
+  // IPC laporan (Ambil data dari backend)
+  ipcMain.handle('get-laporan', async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/laporan');
+      return { success: true, data: response.data.data };
+    } catch (error) {
+      console.error('Error fetching laporan:', error.message);
+      return { success: false, error: error.message };
+    }
+  })
+
+  // IPC laporan (Update data ke backend)
+  ipcMain.handle('update-laporan', async (event, id, data) => {
+    try {
+      const response = await axios.put(`http://localhost:3000/laporan/${id}`, data);
+      return { success: true, data: response.data };
+    } catch (error) {
+      console.error('Error updating laporan:', error.message);
+      return { success: false, error: error.message };
+    }
+  })
+
+  // IPC laporan (Delete data dari backend)
+  ipcMain.handle('delete-laporan', async (event, id) => {
+    try {
+      const response = await axios.delete(`http://localhost:3000/laporan/${id}`);
+      return { success: true, data: response.data };
+    } catch (error) {
+      console.error('Error deleting laporan:', error.message);
+      return { success: false, error: error.message };
     }
   })
 
