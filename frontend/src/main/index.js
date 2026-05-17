@@ -110,6 +110,39 @@ app.whenReady().then(() => {
     }
   })
 
+  // IPC teknisi (Kirim data ke backend)
+  ipcMain.handle('send-teknisi', async (event, data) => {
+    try {
+      const response = await axios.post('http://localhost:3000/teknisi', data);
+      return { success: true, data: response.data };
+    } catch (error) {
+      console.error('Error sending teknisi:', error.message);
+      return { success: false, error: error.message };
+    }
+  })
+
+  // IPC teknisi (Ambil data dari backend)
+  ipcMain.handle('get-teknisi', async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/teknisi');
+      return { success: true, data: response.data.data };
+    } catch (error) {
+      console.error('Error fetching teknisi:', error.message);
+      return { success: false, error: error.message };
+    }
+  })
+
+  // IPC teknisi (Delete data dari backend)
+  ipcMain.handle('delete-teknisi', async (event, id) => {
+    try {
+      const response = await axios.delete(`http://localhost:3000/teknisi/${id}`);
+      return { success: true, data: response.data };
+    } catch (error) {
+      console.error('Error deleting teknisi:', error.message);
+      return { success: false, error: error.message };
+    }
+  })
+
   createWindow()
 
   app.on('activate', function () {

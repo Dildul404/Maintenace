@@ -169,6 +169,12 @@ function initNavigation() {
     } else if (page == "penunjukan-teknisi") {
       await loadComponent("list-teknisi", "list-teknisi");
       await loadComponent("tabel-daftar", "tabel-daftar");
+      await loadComponent("form-teknisi", "form-teknisi-popup");
+      await loadComponent("confirmation", "confirmation-popup");
+      await loadComponent("pilih-teknisi", "pilih-teknisi-popup");
+      setupTeknisiModal();
+      setupPilihTeknisiModal();
+      await loadDataTeknisi();
       await loadDataLaporan("Pilih teknisi"); // Ambil & tampilkan data dinamis
     }
   });
@@ -269,7 +275,7 @@ async function loadDataLaporan(...items) {
           </td>
           <td class="px-2 py-2 text-center sm:px-3 sm:py-2.5 md:px-4 md:py-3 lg:px-6 lg:py-3.5">
             <div class="flex flex-col gap-1 sm:flex-row sm:justify-center sm:gap-1.5">
-              ${items.length != 0? items.map(btn => tdCustom(item.id, btn)).join(''): ''}
+              ${items.length != 0 ? items.map(btn => tdCustom(item.id, btn)).join('') : ''}
             </div>
           </td>
         `;
@@ -303,6 +309,9 @@ async function loadDataLaporan(...items) {
               window.openModalStatus(item);
             }
           }
+        } else if (e.target.classList.contains('btn-pilih-teknisi')) {
+          const id = e.target.getAttribute('data-id');
+          openModalPilihTeknisi(id);
         } else if (e.target.classList.contains('btn-hapus')) {
           const isConfirmed = await showConfirm('Apakah Anda yakin ingin menghapus data ini?');
           if (isConfirmed) {
@@ -588,7 +597,7 @@ function setupStatusModal() {
 
       const newStatus = inputStatus.value;
       const originalText = btnSimpan.innerHTML;
-      
+
       btnSimpan.innerHTML = 'Menyimpan...';
       btnSimpan.disabled = true;
 
@@ -617,4 +626,309 @@ function setupStatusModal() {
       }
     });
   }
+}
+
+// -------------------------------------
+// Teknisi Logic
+// -------------------------------------
+let activeAssignLaporanId = null;
+
+function setupTeknisiModal() {
+  const btnTambah = document.getElementById('btn-tambah-teknisi');
+  const modal = document.getElementById('modal-tambah-teknisi');
+  const btnClose = document.getElementById('btn-close-teknisi-modal');
+  const btnBatal = document.getElementById('btn-batal-teknisi');
+  const backdrop = document.getElementById('modal-teknisi-backdrop');
+  const inputFoto = document.getElementById('input-teknisi-foto');
+  const previewContainer = document.getElementById('preview-teknisi-foto');
+  const imgPreview = document.getElementById('img-teknisi-preview');
+
+  function openModal() {
+    if (modal) {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+  }
+
+  function closeModal() {
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+    document.getElementById('form-tambah-teknisi').reset();
+    if (previewContainer) previewContainer.classList.add('hidden');
+    if (imgPreview) imgPreview.src = '';
+  }
+
+  if (btnTambah) btnTambah.addEventListener('click', openModal);
+  if (btnClose) btnClose.addEventListener('click', closeModal);
+  if (btnBatal) btnBatal.addEventListener('click', closeModal);
+  if (backdrop) backdrop.addEventListener('click', closeModal);
+
+  // Preview foto
+  if (inputFoto) {
+    inputFoto.addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (ev) {
+          if (imgPreview) imgPreview.src = ev.target.result;
+          if (previewContainer) previewContainer.classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+
+  const btnSimpan = document.getElementById('btn-simpan-teknisi');
+  if (btnSimpan) {
+    btnSimpan.addEventListener('click', async function () {
+      const namaVal = document.getElementById('input-teknisi-nama').value;
+      const kategoriVal = document.getElementById('input-teknisi-kategori').value;
+
+      if (!namaVal || !kategoriVal) {
+        showAlert('error', 'Nama dan Kategori wajib diisi!');
+        return;
+      }
+
+      const data = {
+        nama: namaVal,
+        kategori: kategoriVal,
+        foto: (imgPreview && imgPreview.src) || ''
+      };
+
+      const originalText = btnSimpan.innerHTML;
+      btnSimpan.innerHTML = 'Menyimpan...';
+      btnSimpan.disabled = true;
+
+      try {
+        const response = await window.api.sendTeknisi(data);
+
+        if (response && response.success) {
+          showAlert('success', 'Teknisi berhasil ditambahkan!');
+          closeModal();
+          await loadDataTeknisi(); // Reload list teknisi
+        } else {
+          showAlert('error', response.message || 'Gagal menyimpan teknisi ke database');
+        }
+      } catch (err) {
+        console.error(err);
+        showAlert('error', 'Gagal menyimpan data teknisi');
+      } finally {
+        btnSimpan.innerHTML = originalText;
+        btnSimpan.disabled = false;
+      }
+    });
+  }
+}
+
+async function loadDataTeknisi() {
+  const container = document.getElementById('teknisi-list-container');
+  if (!container) return;
+
+  try {
+    container.innerHTML = '<div class="p-4 text-center text-slate-500 text-sm">Memuat data teknisi...</div>';
+
+    const response = await window.api.getTeknisi();
+
+    if (response && response.success && response.data && response.data.length > 0) {
+      container.innerHTML = '';
+
+      response.data.forEach(item => {
+        const imgSrc = item.foto && !item.foto.startsWith('http') && !item.foto.startsWith('data:image')
+          ? `http://localhost:3000/${item.foto}`
+          : (item.foto || 'https://via.placeholder.com/150');
+
+        const div = document.createElement('div');
+        div.className = 'p-3 flex items-center justify-between hover:bg-slate-50 transition duration-150 border-b border-gray-100';
+
+        let catBadgeColor = 'bg-indigo-50 text-indigo-700 border border-indigo-100';
+        if (item.kategori.includes('Elektronik')) catBadgeColor = 'bg-blue-50 text-blue-700 border border-blue-100';
+        else if (item.kategori.includes('Furniture')) catBadgeColor = 'bg-amber-50 text-amber-700 border border-amber-100';
+        else if (item.kategori.includes('Plambing')) catBadgeColor = 'bg-cyan-50 text-cyan-700 border border-cyan-100';
+        else if (item.kategori.includes('Listrik')) catBadgeColor = 'bg-yellow-50 text-yellow-700 border border-yellow-100';
+        else if (item.kategori.includes('Bangunan')) catBadgeColor = 'bg-rose-50 text-rose-700 border border-rose-100';
+
+        div.innerHTML = `
+          <div class="flex items-center gap-3">
+            <img src="${imgSrc}" alt="${item.nama}" class="h-10 w-10 rounded-full object-cover ring-2 ring-slate-100" onerror="this.src='https://via.placeholder.com/150'" />
+            <div class="min-w-0">
+              <p class="font-medium text-slate-800 text-sm truncate">${item.nama}</p>
+              <span class="inline-block rounded-md px-1.5 py-0.5 text-[10px] font-medium mt-0.5 ${catBadgeColor}">${item.kategori}</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            ${activeAssignLaporanId ? `
+              <button data-nama="${item.nama}" class="btn-tunjuk-teknisi bg-emerald-500 hover:bg-emerald-600 text-white text-[11px] px-2.5 py-1 rounded font-medium cursor-pointer transition">
+                Tunjuk
+              </button>
+            ` : `
+              <button data-id="${item.id}" class="btn-hapus-teknisi text-gray-400 hover:text-red-500 p-1 rounded-full hover:bg-red-50 transition cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            `}
+          </div>
+        `;
+        container.appendChild(div);
+      });
+
+      // Bind events for delete & assign
+      container.querySelectorAll('.btn-hapus-teknisi').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const id = btn.getAttribute('data-id');
+          const isConfirmed = await showConfirm('Apakah Anda yakin ingin menghapus teknisi ini?');
+          if (isConfirmed) {
+            try {
+              const res = await window.api.deleteTeknisi(id);
+              if (res.success) {
+                showAlert('success', 'Teknisi berhasil dihapus!');
+                await loadDataTeknisi();
+              } else {
+                showAlert('error', 'Gagal menghapus teknisi.');
+              }
+            } catch (err) {
+              console.error(err);
+              showAlert('error', 'Gagal menghapus teknisi.');
+            }
+          }
+        });
+      });
+
+      container.querySelectorAll('.btn-tunjuk-teknisi').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const namaTeknisi = btn.getAttribute('data-nama');
+          if (activeAssignLaporanId && namaTeknisi) {
+            try {
+              btn.innerHTML = '...';
+              btn.disabled = true;
+
+              const item = window.laporanData.find(i => i.id == activeAssignLaporanId);
+              const updateData = { ...item, teknisi: namaTeknisi, status: 'proses' };
+
+              const res = await window.api.updateLaporan(activeAssignLaporanId, updateData);
+              if (res.success) {
+                showAlert('success', `Teknisi ${namaTeknisi} berhasil ditunjuk!`);
+                activeAssignLaporanId = null;
+                await loadDataTeknisi();
+                await loadDataLaporan("Pilih teknisi");
+              } else {
+                showAlert('error', 'Gagal menunjuk teknisi.');
+              }
+            } catch (err) {
+              console.error(err);
+              showAlert('error', 'Gagal menunjuk teknisi.');
+            }
+          }
+        });
+      });
+
+    } else {
+      container.innerHTML = '<div class="p-4 text-center text-slate-400 text-sm">Belum ada data teknisi.</div>';
+    }
+  } catch (err) {
+    console.error(err);
+    container.innerHTML = '<div class="p-4 text-center text-red-500 text-sm">Gagal memuat data teknisi.</div>';
+  }
+}
+
+// -------------------------------------
+// Pilih/Tunjuk Teknisi Modal Logic
+// -------------------------------------
+let activeAssignLaporanIdForModal = null;
+
+function setupPilihTeknisiModal() {
+  const modal = document.getElementById('modal-pilih-teknisi');
+  const btnClose = document.getElementById('btn-close-pilih-teknisi');
+  const btnBatal = document.getElementById('btn-batal-pilih-teknisi');
+  const backdrop = document.getElementById('modal-pilih-teknisi-backdrop');
+  const btnSimpan = document.getElementById('btn-simpan-pilih-teknisi');
+
+  function closeModal() {
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+    activeAssignLaporanIdForModal = null;
+  }
+
+  if (btnClose) btnClose.addEventListener('click', closeModal);
+  if (btnBatal) btnBatal.addEventListener('click', closeModal);
+  if (backdrop) backdrop.addEventListener('click', closeModal);
+
+  if (btnSimpan) {
+    btnSimpan.addEventListener('click', async function () {
+      if (!activeAssignLaporanIdForModal) return;
+
+      const selectVal = document.getElementById('select-pilih-teknisi').value;
+      if (!selectVal) {
+        showAlert('error', 'Silakan pilih teknisi terlebih dahulu!');
+        return;
+      }
+
+      const originalText = btnSimpan.innerHTML;
+      btnSimpan.innerHTML = 'Menyimpan...';
+      btnSimpan.disabled = true;
+
+      try {
+        const item = window.laporanData.find(i => i.id == activeAssignLaporanIdForModal);
+        const updateData = { ...item, teknisi: selectVal, status: 'proses' };
+
+        const res = await window.api.updateLaporan(activeAssignLaporanIdForModal, updateData);
+        if (res.success) {
+          showAlert('success', `Teknisi ${selectVal} berhasil ditunjuk!`);
+          closeModal();
+          await loadDataLaporan("Pilih teknisi"); // Reload table
+        } else {
+          showAlert('error', 'Gagal menunjuk teknisi.');
+        }
+      } catch (err) {
+        console.error(err);
+        showAlert('error', 'Gagal menunjuk teknisi.');
+      } finally {
+        btnSimpan.innerHTML = originalText;
+        btnSimpan.disabled = false;
+      }
+    });
+  }
+}
+
+async function openModalPilihTeknisi(laporanId) {
+  const modal = document.getElementById('modal-pilih-teknisi');
+  const judulEl = document.getElementById('pilih-teknisi-judul-laporan');
+  const select = document.getElementById('select-pilih-teknisi');
+
+  if (!modal || !judulEl || !select) return;
+
+  activeAssignLaporanIdForModal = laporanId;
+
+  // Set judul laporan
+  const item = window.laporanData.find(i => i.id == laporanId);
+  judulEl.textContent = item ? item.judul : '-';
+
+  // Load select options with available technicians
+  try {
+    select.innerHTML = '<option value="">-- Memuat Teknisi... --</option>';
+    const response = await window.api.getTeknisi();
+
+    if (response && response.success && response.data && response.data.length > 0) {
+      select.innerHTML = '<option value="">-- Pilih Teknisi --</option>';
+      response.data.forEach(tek => {
+        // "tanpa menampilkan foto teknisi" -> just show Name and Category in options
+        select.innerHTML += `<option value="${tek.nama}">${tek.nama} (${tek.kategori})</option>`;
+      });
+    } else {
+      select.innerHTML = '<option value="">Belum ada data teknisi</option>';
+    }
+  } catch (err) {
+    console.error(err);
+    select.innerHTML = '<option value="">Gagal memuat teknisi</option>';
+  }
+
+  // Open modal
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
 }

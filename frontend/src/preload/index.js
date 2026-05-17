@@ -6,7 +6,10 @@ const api = {
   sendLaporan: (data) => ipcRenderer.invoke('send-laporan', data),
   getLaporan: () => ipcRenderer.invoke('get-laporan'),
   updateLaporan: (id, data) => ipcRenderer.invoke('update-laporan', id, data),
-  deleteLaporan: (id) => ipcRenderer.invoke('delete-laporan', id)
+  deleteLaporan: (id) => ipcRenderer.invoke('delete-laporan', id),
+  sendTeknisi: (data) => ipcRenderer.invoke('send-teknisi', data),
+  getTeknisi: () => ipcRenderer.invoke('get-teknisi'),
+  deleteTeknisi: (id) => ipcRenderer.invoke('delete-teknisi', id)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

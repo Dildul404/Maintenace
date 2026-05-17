@@ -13,6 +13,9 @@ const laporan = require('./router/laporan');
 
 app.use('/laporan', laporan);
 
+const teknisi = require('./router/teknisi');
+app.use('/teknisi', teknisi);
+
 const db = require('./models');
 
 app.get('/', (req, res) => {
