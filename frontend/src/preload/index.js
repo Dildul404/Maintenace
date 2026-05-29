@@ -3,7 +3,7 @@ import { electronAPI } from '@electron-toolkit/preload'
 import ElectronStore from 'electron-store'
 
 // buat store
-const store = new ElectronStore.default();
+const store = new ElectronStore.default()
 
 // Custom APIs for renderer
 const api = {
@@ -14,7 +14,11 @@ const api = {
 
   sendTeknisi: (data) => ipcRenderer.invoke('send-teknisi', data),
   getTeknisi: () => ipcRenderer.invoke('get-teknisi'),
-  deleteTeknisi: (id) => ipcRenderer.invoke('delete-teknisi', id)
+  deleteTeknisi: (id) => ipcRenderer.invoke('delete-teknisi', id),
+
+  sendUser: (data) => ipcRenderer.invoke('send-user', data),
+  getUser: (email, password) => ipcRenderer.invoke('get-user', email, password),
+  deleteUser: (id) => ipcRenderer.invoke('delete-user', id)
 }
 
 // expose ke renderer
@@ -25,20 +29,25 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('api', api)
 
     contextBridge.exposeInMainWorld('nav', {
-      goTo: (page) => ipcRenderer.send('navigate', page),
+      goTo: (page) => ipcRenderer.send('navigate', page)
     })
 
     contextBridge.exposeInMainWorld('dataSession', {
       setData: (key, value) => store.set(key, value),
+      updateData: (key, value) => {
+        const oldData = store.get(key) || {}
+        store.set(key, {
+          ...oldData,
+          ...value
+        })
+      },
       getData: (key) => store.get(key),
       deleteData: (key) => store.delete(key),
       clearData: () => store.clear()
     })
-
   } catch (error) {
     console.error(error)
   }
-
 } else {
   window.electron = electronAPI
   window.api = api

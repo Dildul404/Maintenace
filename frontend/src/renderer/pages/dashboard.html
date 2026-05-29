@@ -1,396 +1,279 @@
 <div class="min-h-screen p-6">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="text-4xl font-bold text-slate-800">Maintenance Dashboard</h1>
 
-    <!-- Header -->
-    <div class="flex items-center justify-between mb-8">
+      <p class="text-slate-500 mt-2">Monitoring system maintenance and server status</p>
+    </div>
+
+    <button
+      href="#"
+      data-page="daftar-laporan"
+      id="daftar-laporan-link"
+      class="bg-indigo-500 cursor-pointer hover:bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center"
+    >
+      Lihat laporan
+    </button>
+  </div>
+
+  <!-- Cards -->
+  <div class="grid md:grid-cols-3 gap-6 mb-8">
+    <!-- Card -->
+    <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
+      <div class="flex justify-between items-center mb-5">
+        <div>
+          <p class="text-slate-400 text-sm">ACTIVE SERVERS</p>
+
+          <h2 class="text-5xl font-bold text-slate-800 mt-2">24</h2>
+        </div>
+
+        <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center">
+          <i class="fas fa-server text-blue-500 text-2xl"></i>
+        </div>
+      </div>
+
+      <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden">
+        <div class="bg-blue-500 h-full rounded-full w-[90%]"></div>
+      </div>
+
+      <p class="text-green-500 text-sm mt-3 font-medium">+99% running normally</p>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
+      <div class="flex justify-between items-center mb-5">
+        <div>
+          <p class="text-slate-400 text-sm">MAINTENANCE TASK</p>
+
+          <h2 class="text-5xl font-bold text-slate-800 mt-2">03</h2>
+        </div>
+
+        <div class="w-14 h-14 rounded-2xl bg-orange-100 flex items-center justify-center">
+          <i class="fas fa-tools text-orange-500 text-2xl"></i>
+        </div>
+      </div>
+
+      <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden">
+        <div class="bg-orange-500 h-full rounded-full w-[65%]"></div>
+      </div>
+
+      <p class="text-orange-500 text-sm mt-3 font-medium">Ongoing maintenance</p>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
+      <div class="flex justify-between items-center mb-5">
+        <div>
+          <p class="text-slate-400 text-sm">SYSTEM SECURITY</p>
+
+          <h2 class="text-5xl font-bold text-slate-800 mt-2">SAFE</h2>
+        </div>
+
+        <div class="w-14 h-14 rounded-2xl bg-green-100 flex items-center justify-center">
+          <i class="fas fa-shield-alt text-green-500 text-2xl"></i>
+        </div>
+      </div>
+
+      <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden">
+        <div class="bg-green-500 h-full rounded-full w-full"></div>
+      </div>
+
+      <p class="text-green-500 text-sm mt-3 font-medium">All systems protected</p>
+    </div>
+  </div>
+
+  <!-- Maintenance Section -->
+  <div class="grid lg:grid-cols-2 gap-6">
+    <!-- Left -->
+    <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h3 class="text-2xl font-bold text-slate-800">Maintenance Progress</h3>
+
+          <p class="text-slate-500 mt-1">Current maintenance activities</p>
+        </div>
+
+        <i class="fas fa-sync-alt text-3xl text-blue-500 animate-spin"></i>
+      </div>
+
+      <div class="space-y-6">
+        <div>
+          <div class="flex justify-between mb-2">
+            <span class="text-slate-700 font-medium"> Database Upgrade </span>
+
+            <span class="text-slate-500"> 80% </span>
+          </div>
+
+          <div class="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
+            <div class="bg-blue-500 h-full rounded-full w-[80%]"></div>
+          </div>
+        </div>
 
         <div>
-            <h1 class="text-4xl font-bold text-slate-800">
-                Maintenance Dashboard
-            </h1>
+          <div class="flex justify-between mb-2">
+            <span class="text-slate-700 font-medium"> Security Patch </span>
 
-            <p class="text-slate-500 mt-2">
-                Monitoring system maintenance and server status
-            </p>
+            <span class="text-slate-500"> 20% </span>
+          </div>
+
+          <div class="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
+            <div class="bg-purple-500 h-full rounded-full w-[65%]"></div>
+          </div>
         </div>
 
-        <button href="#" data-page="daftar-laporan" id="daftar-laporan-link"
-            class="bg-indigo-500 cursor-pointer hover:bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center">Lihat
-            laporan</button>
+        <div>
+          <div class="flex justify-between mb-2">
+            <span class="text-slate-700 font-medium"> Backup System </span>
 
+            <span class="text-slate-500"> 20% </span>
+          </div>
+
+          <div class="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
+            <div class="bg-green-500 h-full rounded-full w-[92%]"></div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Cards -->
-    <div class="grid md:grid-cols-3 gap-6 mb-8">
+    <!-- Right -->
+    <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h3 class="text-2xl font-bold text-slate-800">Maintenance Notice</h3>
 
-        <!-- Card -->
-        <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
-
-            <div class="flex justify-between items-center mb-5">
-
-                <div>
-                    <p class="text-slate-400 text-sm">
-                        ACTIVE SERVERS
-                    </p>
-
-                    <h2 class="text-5xl font-bold text-slate-800 mt-2">
-                        24
-                    </h2>
-                </div>
-
-                <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center">
-                    <i class="fas fa-server text-blue-500 text-2xl"></i>
-                </div>
-
-            </div>
-
-            <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden">
-                <div class="bg-blue-500 h-full rounded-full w-[90%]"></div>
-            </div>
-
-            <p class="text-green-500 text-sm mt-3 font-medium">
-                +99% running normally
-            </p>
-
+          <p class="text-slate-500 mt-1">Important information</p>
         </div>
 
-        <!-- Card -->
-        <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
-
-            <div class="flex justify-between items-center mb-5">
-
-                <div>
-                    <p class="text-slate-400 text-sm">
-                        MAINTENANCE TASK
-                    </p>
-
-                    <h2 class="text-5xl font-bold text-slate-800 mt-2">
-                        03
-                    </h2>
-                </div>
-
-                <div class="w-14 h-14 rounded-2xl bg-orange-100 flex items-center justify-center">
-                    <i class="fas fa-tools text-orange-500 text-2xl"></i>
-                </div>
-
-            </div>
-
-            <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden">
-                <div class="bg-orange-500 h-full rounded-full w-[65%]"></div>
-            </div>
-
-            <p class="text-orange-500 text-sm mt-3 font-medium">
-                Ongoing maintenance
-            </p>
-
+        <div class="w-14 h-14 rounded-2xl bg-red-100 flex items-center justify-center">
+          <i class="fas fa-exclamation-triangle text-red-500 text-2xl"></i>
         </div>
+      </div>
 
-        <!-- Card -->
-        <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
+      <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200">
+        <h4 class="text-xl font-bold text-slate-800 mb-4">Temporary Downtime</h4>
 
-            <div class="flex justify-between items-center mb-5">
+        <p class="text-slate-600 leading-relaxed mb-6">
+          The system is currently under scheduled maintenance to improve server stability,
+          performance, and security.
+        </p>
 
-                <div>
-                    <p class="text-slate-400 text-sm">
-                        SYSTEM SECURITY
-                    </p>
+        <div class="space-y-4">
+          <div class="flex items-center gap-3">
+            <i class="fas fa-clock text-blue-500"></i>
 
-                    <h2 class="text-5xl font-bold text-slate-800 mt-2">
-                        SAFE
-                    </h2>
-                </div>
+            <span class="text-slate-600"> Estimated Time: 2 Hours </span>
+          </div>
 
-                <div class="w-14 h-14 rounded-2xl bg-green-100 flex items-center justify-center">
-                    <i class="fas fa-shield-alt text-green-500 text-2xl"></i>
-                </div>
+          <div class="flex items-center gap-3">
+            <i class="fas fa-check-circle text-green-500"></i>
 
-            </div>
+            <span class="text-slate-600"> Backup Completed Successfully </span>
+          </div>
 
-            <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden">
-                <div class="bg-green-500 h-full rounded-full w-full"></div>
-            </div>
+          <div class="flex items-center gap-3">
+            <i class="fas fa-server text-orange-500"></i>
 
-            <p class="text-green-500 text-sm mt-3 font-medium">
-                All systems protected
-            </p>
-
+            <span class="text-slate-600"> Updating Core System </span>
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
 
+  <!-- STATISTIK LAPORAN -->
+  <div class="mt-8 bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h3 class="text-2xl font-bold text-slate-800">Maintenance Statistics Report</h3>
+
+        <p class="text-slate-500 mt-1">Monthly maintenance damage statistics</p>
+      </div>
+
+      <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center">
+        <i class="fas fa-chart-column text-blue-500 text-2xl"></i>
+      </div>
     </div>
 
-    <!-- Maintenance Section -->
-    <div class="grid lg:grid-cols-2 gap-6">
+    <!-- MINI CARD -->
+    <div class="grid md:grid-cols-3 gap-5 mb-10">
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5">
+        <p class="text-slate-400 text-sm">TOTAL DAMAGE</p>
 
-        <!-- Left -->
-        <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+        <h2 class="text-4xl font-bold text-slate-800 mt-2">248</h2>
 
-            <div class="flex items-center justify-between mb-6">
+        <p class="text-red-500 text-sm mt-2 font-medium">+12% increased this month</p>
+      </div>
 
-                <div>
-                    <h3 class="text-2xl font-bold text-slate-800">
-                        Maintenance Progress
-                    </h3>
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5">
+        <p class="text-slate-400 text-sm">FIXED ITEMS</p>
 
-                    <p class="text-slate-500 mt-1">
-                        Current maintenance activities
-                    </p>
-                </div>
+        <h2 class="text-4xl font-bold text-slate-800 mt-2">198</h2>
 
-                <i class="fas fa-sync-alt text-3xl text-blue-500 animate-spin"></i>
+        <p class="text-green-500 text-sm mt-2 font-medium">Maintenance completed successfully</p>
+      </div>
 
-            </div>
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5">
+        <p class="text-slate-400 text-sm">CRITICAL ISSUES</p>
 
-            <div class="space-y-6">
+        <h2 class="text-4xl font-bold text-slate-800 mt-2">35</h2>
 
-                <div>
-                    <div class="flex justify-between mb-2">
-                        <span class="text-slate-700 font-medium">
-                            Database Upgrade
-                        </span>
-
-                        <span class="text-slate-500">
-                            80%
-                        </span>
-                    </div>
-
-                    <div class="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
-                        <div class="bg-blue-500 h-full rounded-full w-[80%]"></div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="flex justify-between mb-2">
-                        <span class="text-slate-700 font-medium">
-                            Security Patch
-                        </span>
-
-                        <span class="text-slate-500">
-                            20%
-                        </span>
-                    </div>
-
-                    <div class="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
-                        <div class="bg-purple-500 h-full rounded-full w-[65%]"></div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="flex justify-between mb-2">
-                        <span class="text-slate-700 font-medium">
-                            Backup System
-                        </span>
-
-                        <span class="text-slate-500">
-                            20%
-                        </span>
-                    </div>
-
-                    <div class="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
-                        <div class="bg-green-500 h-full rounded-full w-[92%]"></div>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- Right -->
-        <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
-
-            <div class="flex items-center justify-between mb-6">
-
-                <div>
-                    <h3 class="text-2xl font-bold text-slate-800">
-                        Maintenance Notice
-                    </h3>
-
-                    <p class="text-slate-500 mt-1">
-                        Important information
-                    </p>
-                </div>
-
-                <div class="w-14 h-14 rounded-2xl bg-red-100 flex items-center justify-center">
-                    <i class="fas fa-exclamation-triangle text-red-500 text-2xl"></i>
-                </div>
-
-            </div>
-
-            <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200">
-
-                <h4 class="text-xl font-bold text-slate-800 mb-4">
-                    Temporary Downtime
-                </h4>
-
-                <p class="text-slate-600 leading-relaxed mb-6">
-                    The system is currently under scheduled maintenance to improve
-                    server stability, performance, and security.
-                </p>
-
-                <div class="space-y-4">
-
-                    <div class="flex items-center gap-3">
-                        <i class="fas fa-clock text-blue-500"></i>
-
-                        <span class="text-slate-600">
-                            Estimated Time: 2 Hours
-                        </span>
-                    </div>
-
-                    <div class="flex items-center gap-3">
-                        <i class="fas fa-check-circle text-green-500"></i>
-
-                        <span class="text-slate-600">
-                            Backup Completed Successfully
-                        </span>
-                    </div>
-
-                    <div class="flex items-center gap-3">
-                        <i class="fas fa-server text-orange-500"></i>
-
-                        <span class="text-slate-600">
-                            Updating Core System
-                        </span>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
+        <p class="text-orange-500 text-sm mt-2 font-medium">Require urgent replacement</p>
+      </div>
     </div>
 
-    <!-- STATISTIK LAPORAN -->
-    <div class="mt-8 bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
-
-        <!-- Header -->
-        <div class="flex items-center justify-between mb-8">
-
-            <div>
-                <h3 class="text-2xl font-bold text-slate-800">
-                    Maintenance Statistics Report
-                </h3>
-
-                <p class="text-slate-500 mt-1">
-                    Monthly maintenance damage statistics
-                </p>
-            </div>
-
-            <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center">
-                <i class="fas fa-chart-column text-blue-500 text-2xl"></i>
-            </div>
-
+    <!-- DIAGRAM BATANG -->
+    <div class="bg-slate-50 rounded-3xl p-8 border border-slate-200">
+      <div class="flex items-end justify-between gap-5 h-80">
+        <div class="flex flex-col items-center w-full">
+          <div
+            class="bg-gradient-to-t from-blue-600 to-blue-400 w-full h-32 rounded-t-2xl shadow-lg hover:scale-105 transition"
+          ></div>
+          <span class="mt-4 font-semibold text-slate-700">Jan</span>
+          <span class="text-slate-400 text-sm">32</span>
         </div>
 
-        <!-- MINI CARD -->
-        <div class="grid md:grid-cols-3 gap-5 mb-10">
-
-            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5">
-
-                <p class="text-slate-400 text-sm">
-                    TOTAL DAMAGE
-                </p>
-
-                <h2 class="text-4xl font-bold text-slate-800 mt-2">
-                    248
-                </h2>
-
-                <p class="text-red-500 text-sm mt-2 font-medium">
-                    +12% increased this month
-                </p>
-
-            </div>
-
-            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5">
-
-                <p class="text-slate-400 text-sm">
-                    FIXED ITEMS
-                </p>
-
-                <h2 class="text-4xl font-bold text-slate-800 mt-2">
-                    198
-                </h2>
-
-                <p class="text-green-500 text-sm mt-2 font-medium">
-                    Maintenance completed successfully
-                </p>
-
-            </div>
-
-            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5">
-
-                <p class="text-slate-400 text-sm">
-                    CRITICAL ISSUES
-                </p>
-
-                <h2 class="text-4xl font-bold text-slate-800 mt-2">
-                    35
-                </h2>
-
-                <p class="text-orange-500 text-sm mt-2 font-medium">
-                    Require urgent replacement
-                </p>
-
-            </div>
-
+        <div class="flex flex-col items-center w-full">
+          <div
+            class="bg-gradient-to-t from-sky-600 to-sky-400 w-full h-52 rounded-t-2xl shadow-lg hover:scale-105 transition"
+          ></div>
+          <span class="mt-4 font-semibold text-slate-700">Feb</span>
+          <span class="text-slate-400 text-sm">56</span>
         </div>
 
-        <!-- DIAGRAM BATANG -->
-        <div class="bg-slate-50 rounded-3xl p-8 border border-slate-200">
-
-            <div class="flex items-end justify-between gap-5 h-80">
-
-                <div class="flex flex-col items-center w-full">
-                    <div
-                        class="bg-gradient-to-t from-blue-600 to-blue-400 w-full h-32 rounded-t-2xl shadow-lg hover:scale-105 transition">
-                    </div>
-                    <span class="mt-4 font-semibold text-slate-700">Jan</span>
-                    <span class="text-slate-400 text-sm">32</span>
-                </div>
-
-                <div class="flex flex-col items-center w-full">
-                    <div
-                        class="bg-gradient-to-t from-sky-600 to-sky-400 w-full h-52 rounded-t-2xl shadow-lg hover:scale-105 transition">
-                    </div>
-                    <span class="mt-4 font-semibold text-slate-700">Feb</span>
-                    <span class="text-slate-400 text-sm">56</span>
-                </div>
-
-                <div class="flex flex-col items-center w-full">
-                    <div
-                        class="bg-gradient-to-t from-cyan-600 to-cyan-400 w-full h-40 rounded-t-2xl shadow-lg hover:scale-105 transition">
-                    </div>
-                    <span class="mt-4 font-semibold text-slate-700">Mar</span>
-                    <span class="text-slate-400 text-sm">40</span>
-                </div>
-
-                <div class="flex flex-col items-center w-full">
-                    <div
-                        class="bg-gradient-to-t from-teal-600 to-teal-400 w-full h-72 rounded-t-2xl shadow-lg hover:scale-105 transition">
-                    </div>
-                    <span class="mt-4 font-semibold text-slate-700">Apr</span>
-                    <span class="text-slate-400 text-sm">72</span>
-                </div>
-
-                <div class="flex flex-col items-center w-full">
-                    <div
-                        class="bg-gradient-to-t from-indigo-600 to-indigo-400 w-full h-48 rounded-t-2xl shadow-lg hover:scale-105 transition">
-                    </div>
-                    <span class="mt-4 font-semibold text-slate-700">Mei</span>
-                    <span class="text-slate-400 text-sm">48</span>
-                </div>
-
-                <div class="flex flex-col items-center w-full">
-                    <div
-                        class="bg-gradient-to-t from-blue-700 to-cyan-500 w-full h-64 rounded-t-2xl shadow-lg hover:scale-105 transition">
-                    </div>
-                    <span class="mt-4 font-semibold text-slate-700">Jun</span>
-                    <span class="text-slate-400 text-sm">65</span>
-                </div>
-
-            </div>
-
+        <div class="flex flex-col items-center w-full">
+          <div
+            class="bg-gradient-to-t from-cyan-600 to-cyan-400 w-full h-40 rounded-t-2xl shadow-lg hover:scale-105 transition"
+          ></div>
+          <span class="mt-4 font-semibold text-slate-700">Mar</span>
+          <span class="text-slate-400 text-sm">40</span>
         </div>
 
+        <div class="flex flex-col items-center w-full">
+          <div
+            class="bg-gradient-to-t from-teal-600 to-teal-400 w-full h-72 rounded-t-2xl shadow-lg hover:scale-105 transition"
+          ></div>
+          <span class="mt-4 font-semibold text-slate-700">Apr</span>
+          <span class="text-slate-400 text-sm">72</span>
+        </div>
+
+        <div class="flex flex-col items-center w-full">
+          <div
+            class="bg-gradient-to-t from-indigo-600 to-indigo-400 w-full h-48 rounded-t-2xl shadow-lg hover:scale-105 transition"
+          ></div>
+          <span class="mt-4 font-semibold text-slate-700">Mei</span>
+          <span class="text-slate-400 text-sm">48</span>
+        </div>
+
+        <div class="flex flex-col items-center w-full">
+          <div
+            class="bg-gradient-to-t from-blue-700 to-cyan-500 w-full h-64 rounded-t-2xl shadow-lg hover:scale-105 transition"
+          ></div>
+          <span class="mt-4 font-semibold text-slate-700">Jun</span>
+          <span class="text-slate-400 text-sm">65</span>
+        </div>
+      </div>
     </div>
-
+  </div>
 </div>

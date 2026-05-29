@@ -2,14 +2,14 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import axios from 'axios';
-import url from '../url/url.js';
-import ElectronStore from 'electron-store';
+import axios from 'axios'
+import url from '../url/url.js'
+import ElectronStore from 'electron-store'
 
 // Deklarasi win di scope module agar bisa diakses oleh ipcMain
 // Deklarasi session
 let win
-const store = new ElectronStore.default();
+const store = new ElectronStore.default()
 
 function createWindow() {
   // Create the browser window.
@@ -70,80 +70,123 @@ app.whenReady().then(() => {
     }
   })
 
+  // -----------------------------------------------------------------------
+  // API laporan
+  // -----------------------------------------------------------------------
+  
   // IPC laporan (Kirim data ke backend)
   ipcMain.handle('send-laporan', async (event, data) => {
     try {
-      const response = await axios.post(`${url}laporan`, data);
-      return { success: true, data: response.data };
+      const response = await axios.post(`${url}laporan`, data)
+      return { success: true, data: response.data }
     } catch (error) {
-      console.error('Error sending laporan:', error.message);
-      return { success: false, error: error.message };
+      console.error('Error sending laporan:', error.message)
+      return { success: false, error: error.message }
     }
   })
+
 
   // IPC laporan (Ambil data dari backend)
   ipcMain.handle('get-laporan', async () => {
     try {
-      const response = await axios.get(`${url}laporan`);
-      return { success: true, data: response.data.data };
+      const response = await axios.get(`${url}laporan`)
+      return { success: true, data: response.data.data }
     } catch (error) {
-      console.error('Error fetching laporan:', error.message);
-      return { success: false, error: error.message };
+      console.error('Error fetching laporan:', error.message)
+      return { success: false, error: error.message }
     }
   })
 
   // IPC laporan (Update data ke backend)
   ipcMain.handle('update-laporan', async (event, id, data) => {
     try {
-      const response = await axios.put(`${url}laporan/${id}`, data);
-      return { success: true, data: response.data };
+      const response = await axios.put(`${url}laporan/${id}`, data)
+      return { success: true, data: response.data }
     } catch (error) {
-      console.error('Error updating laporan:', error.message);
-      return { success: false, error: error.message };
+      console.error('Error updating laporan:', error.message)
+      return { success: false, error: error.message }
     }
   })
 
   // IPC laporan (Delete data dari backend)
   ipcMain.handle('delete-laporan', async (event, id) => {
     try {
-      const response = await axios.delete(`${url}laporan/${id}`);
-      return { success: true, data: response.data };
+      const response = await axios.delete(`${url}laporan/${id}`)
+      return { success: true, data: response.data }
     } catch (error) {
-      console.error('Error deleting laporan:', error.message);
-      return { success: false, error: error.message };
+      console.error('Error deleting laporan:', error.message)
+      return { success: false, error: error.message }
     }
   })
+
+  // -----------------------------------------------------------------------
+  // API teknisi
+  // -----------------------------------------------------------------------
 
   // IPC teknisi (Kirim data ke backend)
   ipcMain.handle('send-teknisi', async (event, data) => {
     try {
-      const response = await axios.post(`${url}teknisi`, data);
-      return { success: true, data: response.data };
+      const response = await axios.post(`${url}teknisi`, data)
+      return { success: true, data: response.data }
     } catch (error) {
-      console.error('Error sending teknisi:', error.message);
-      return { success: false, error: error.message };
+      console.error('Error sending teknisi:', error.message)
+      return { success: false, error: error.message }
     }
   })
 
   // IPC teknisi (Ambil data dari backend)
   ipcMain.handle('get-teknisi', async () => {
     try {
-      const response = await axios.get(`${url}teknisi`);
-      return { success: true, data: response.data.data };
+      const response = await axios.get(`${url}teknisi`)
+      return { success: true, data: response.data.data }
     } catch (error) {
-      console.error('Error fetching teknisi:', error.message);
-      return { success: false, error: error.message };
+      console.error('Error fetching teknisi:', error.message)
+      return { success: false, error: error.message }
     }
   })
 
   // IPC teknisi (Delete data dari backend)
   ipcMain.handle('delete-teknisi', async (event, id) => {
     try {
-      const response = await axios.delete(`${url}teknisi/${id}`);
-      return { success: true, data: response.data };
+      const response = await axios.delete(`${url}teknisi/${id}`)
+      return { success: true, data: response.data }
     } catch (error) {
-      console.error('Error deleting teknisi:', error.message);
-      return { success: false, error: error.message };
+      console.error('Error deleting teknisi:', error.message)
+      return { success: false, error: error.message }
+    }
+  })
+
+  // -----------------------------------------------------------------------
+  // API user
+  // -----------------------------------------------------------------------
+
+  ipcMain.handle('send-user', async (event, data) => {
+    try {
+      const response = await axios.post(`${url}user`, data)
+      return { success: true, data: response.data }
+    } catch (error) {
+      console.error('Error sending user:', error.message)
+      return { success: false, error: error.message }
+    }
+  })
+
+  ipcMain.handle('get-user', async (event, email, password) => {
+    try {
+      const response = await axios.get(`${url}user/${email}/${password}`)
+      return { success: true, data: response.data.data }
+    } catch (error) {
+      console.error('Error fetching user:', error.message)
+      return { success: false, error: error.message }
+    }
+  })
+
+  ipcMain.handle('delete-user', async (event, id) => {
+    try {
+      const response = await axios.delete(`${url}user/${id}`)
+      return { success: true, data: response.data }
+    } catch (error) {
+      console.error('Error deleting user:', error.message)
+      return { success: false, error: error.message }
     }
   })
 
@@ -164,7 +207,6 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
-
 
 // -------------------------------------------------------------------------
 // session

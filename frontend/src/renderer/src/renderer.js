@@ -1,22 +1,38 @@
 // ------------------------------------
 // import
 // ------------------------------------
-import "./auth.js";
+import { userLogin, logout } from "./auth.js";
+
+const user = window.dataSession.getData('login');
 
 // auth
 document.addEventListener('DOMContentLoaded', async () => {
-  await loadSidebar();
-  initNavigation();
-
   const auth = window.dataSession.getData('is-login');
-  if (auth === undefined) {
-    loadPage("login");
-    const sidebar = document.getElementById("sidebar").classList.add("hidden");
-    const loginBtn = document.getElementById("loginBtn").addEventListener("click",simpanLogin(loginBtn));
+
+  if (auth.login === false) {
+    await loadPage("login");
+    document.getElementById("sidebar")
+      .classList.add("hidden");
+    const loginBtn = document.getElementById("loginBtn");
+    loginBtn.addEventListener("click", async () => {
+      await userLogin();
+
+      if (user.role === "admin") {
+        await loadSidebar("admin-sidebar");
+        loadPage("dashboard");
+        const logoutBtn = document.getElementById('logoutBtn');
+        logoutBtn.addEventListener('click', logout)
+      } else if (user.role === "user") {
+        await loadSidebar("user-sidebar");
+        loadPage("daftar-laporan");
+      }
+    });
   } else {
-    loadPage('dashboard'); // default page    
+    await loadSidebar("admin-sidebar");
+    loadPage('dashboard');
   }
 
+  initNavigation();
 });
 
 // -------------------------------------
@@ -96,9 +112,9 @@ async function showConfirm(message) {
 // -------------------------------------
 // sidebar
 // -------------------------------------
-async function loadSidebar() {
+async function loadSidebar(sidebar) {
   try {
-    const res = await fetch('./component/sidebar.html');
+    const res = await fetch(`./component/${sidebar}.html`);
     const html = await res.text();
 
     document.getElementById('sidebar').innerHTML = html;
@@ -188,7 +204,7 @@ function initNavigation() {
       await loadComponent("detail-kerusakan", "detail-kerusakan");
       setupModal();
       setupDetailModal();
-      await loadDataLaporan("Detail"); // Ambil & tampilkan data dinamis
+      await loadDataLaporan("Detail", "Edit"); // Ambil & tampilkan data dinamis
     } else if (page == "status-laporan") {
       await loadComponent("tabel-daftar", "tabel-daftar");
       await loadComponent("edit-status", "edit-status-popup");
@@ -614,6 +630,13 @@ function setupStatusModal() {
 
   window.openModalStatus = function (data) {
     currentId = data.id;
+    if (data.teknisi === "Belum ditugaskan") {
+      showAlert('warning', 'Laporan belum ditugaskan ke teknisi');
+      return;
+    } else if (data.status === "selesai") {
+      showAlert('info', 'Laporan sudah selesai!');
+      return;
+    }
     if (titleEl) titleEl.textContent = data.judul || '-';
     if (inputStatus) inputStatus.value = data.status || 'menunggu';
     openModal();

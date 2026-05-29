@@ -5,9 +5,7 @@ var electron_vite_config_default = defineConfig({
   main: {},
   preload: {},
   renderer: {
-    plugins: [
-      tailwindcss()
-    ]
+    plugins: [tailwindcss()]
   }
 });
 export {

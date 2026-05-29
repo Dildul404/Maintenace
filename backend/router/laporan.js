@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs');
-const path = require('path');
 const { Laporan } = require('../models');
+const {Op} = require('sequelize');
 
 router.get('/', async (req, res) => {
     try {

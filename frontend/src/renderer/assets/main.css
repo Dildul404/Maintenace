@@ -1,5 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap");
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
 @plugin "daisyui";
 
 /* Scan komponen yang di-load via fetch agar class-nya masuk ke CSS output */
@@ -33,7 +33,9 @@
   --border-width-1: 1px;
 
   /* Fonts */
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans:
+    'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
 
   /* slate */
   --slate-50: #f8fafc;
@@ -70,10 +72,7 @@
   display: none;
 }
 
-
-
 @layer utilities {
-
   /* dashboard */
 
   .gradient-bg {
@@ -86,7 +85,9 @@
 
   .card-hover:hover {
     transform: translateY(-4px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow:
+      0 20px 25px -5px rgba(0, 0, 0, 0.1),
+      0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
 
   .security-shield {
@@ -153,7 +154,6 @@
 
   /* OPTIONAL: kalau mau pulse & bounce tanpa Tailwind */
   @keyframes pulse {
-
     0%,
     100% {
       opacity: 1;
@@ -165,7 +165,6 @@
   }
 
   @keyframes bounce {
-
     0%,
     100% {
       transform: translateY(-5%);
