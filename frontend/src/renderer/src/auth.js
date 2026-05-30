@@ -1,3 +1,10 @@
+// import
+import { loadPage } from "./page.js";
+import { loadSidebar, initNavigation } from "./sidebar.js";
+
+const user = window.dataSession.getData('login');
+
+// export function
 export async function userRegister() {
   // ambil username & password
   let inpUsername = document.getElementById('username')
@@ -58,3 +65,29 @@ export async function logout() {
   window.dataSession.updateData('is-login', { login: false })
   location.reload()
 }
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const auth = window.dataSession.getData('is-login');
+
+  if (auth.login === false) {
+    await loadPage("login");
+    document.getElementById("sidebar").classList.add("hidden");
+    const loginBtn = document.getElementById("loginBtn");
+    loginBtn.addEventListener("click", async () => {
+      await userLogin();
+    });
+  } else {
+    if (user.role === "admin") {
+      loadPage("dashboard");
+      await loadSidebar("admin-sidebar");
+      initNavigation("dashboard");
+
+
+    } else if (user.role === "user") {
+      loadPage("daftar-laporan");
+      await loadSidebar("user-sidebar");
+      initNavigation("daftar-laporan");
+
+    }
+  }
+});

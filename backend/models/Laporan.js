@@ -25,12 +25,17 @@ module.exports = (sequelize, DataTypes) => {
         },
         foto: {
             type: DataTypes.STRING(255)
+        },
+        verifikasi: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
         }
     }, {
         tableName: 'laporan',
         timestamps: true,
         createdAt: 'created_at',
-        updatedAt: false // Di tabel SQL kita tidak ada updated_at
+        updatedAt: 'updated_at'
     });
     
     return Laporan;

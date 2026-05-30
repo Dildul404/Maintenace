@@ -1,0 +1,120 @@
+let activeAssignLaporanId = null;
+
+// import
+import { showAlert } from "./alert.js";
+import { showConfirm } from "./confirm.js";
+
+// export function
+export async function loadDataTeknisi() {
+  const container = document.getElementById('teknisi-list-container');
+  if (!container) return;
+
+  try {
+    container.innerHTML = '<div class="p-4 text-center text-slate-500 text-sm">Memuat data teknisi...</div>';
+
+    const response = await window.api.getTeknisi();
+
+    if (response && response.success && response.data && response.data.length > 0) {
+      container.innerHTML = '';
+
+      response.data.forEach(item => {
+        const imgSrc = item.foto && !item.foto.startsWith('http') && !item.foto.startsWith('data:image')
+          ? `http://localhost:3000/${item.foto}`
+          : (item.foto || 'https://via.placeholder.com/150');
+
+        const div = document.createElement('div');
+        div.className = 'p-3 flex items-center justify-between hover:bg-slate-50 transition duration-150 border-b border-gray-100';
+
+        let catBadgeColor = 'bg-indigo-50 text-indigo-700 border border-indigo-100';
+        if (item.kategori.includes('Elektronik')) catBadgeColor = 'bg-blue-50 text-blue-700 border border-blue-100';
+        else if (item.kategori.includes('Furniture')) catBadgeColor = 'bg-amber-50 text-amber-700 border border-amber-100';
+        else if (item.kategori.includes('Plambing')) catBadgeColor = 'bg-cyan-50 text-cyan-700 border border-cyan-100';
+        else if (item.kategori.includes('Listrik')) catBadgeColor = 'bg-yellow-50 text-yellow-700 border border-yellow-100';
+        else if (item.kategori.includes('Bangunan')) catBadgeColor = 'bg-rose-50 text-rose-700 border border-rose-100';
+
+        div.innerHTML = `
+          <div class="flex items-center gap-3">
+            <img src="${imgSrc}" alt="${item.nama}" class="h-10 w-10 rounded-full object-cover ring-2 ring-slate-100" onerror="this.src='https://via.placeholder.com/150'" />
+            <div class="min-w-0">
+              <p class="font-medium text-slate-800 text-sm truncate">${item.nama}</p>
+              <span class="inline-block rounded-md px-1.5 py-0.5 text-[10px] font-medium mt-0.5 ${catBadgeColor}">${item.kategori}</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            ${activeAssignLaporanId ? `
+              <button data-nama="${item.nama}" class="btn-tunjuk-teknisi bg-emerald-500 hover:bg-emerald-600 text-white text-[11px] px-2.5 py-1 rounded font-medium cursor-pointer transition">
+                Tunjuk
+              </button>
+            ` : `
+              <button data-id="${item.id}" class="btn-hapus-teknisi text-gray-400 hover:text-red-500 p-1 rounded-full hover:bg-red-50 transition cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            `}
+          </div>
+        `;
+        container.appendChild(div);
+      });
+
+      // Bind events for delete & assign
+      container.querySelectorAll('.btn-hapus-teknisi').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const id = btn.getAttribute('data-id');
+          const isConfirmed = await showConfirm('Apakah Anda yakin ingin menghapus teknisi ini?');
+          if (isConfirmed) {
+            try {
+              const res = await window.api.deleteTeknisi(id);
+              if (res.success) {
+                showAlert('success', 'Teknisi berhasil dihapus!');
+                await loadDataTeknisi();
+              } else {
+                showAlert('error', 'Gagal menghapus teknisi.');
+              }
+            } catch (err) {
+              console.error(err);
+              showAlert('error', 'Gagal menghapus teknisi.');
+            }
+          }
+        });
+      });
+
+      container.querySelectorAll('.btn-tunjuk-teknisi').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const namaTeknisi = btn.getAttribute('data-nama');
+          if (activeAssignLaporanId && namaTeknisi) {
+            try {
+              btn.innerHTML = '...';
+              btn.disabled = true;
+
+              const item = window.laporanData.find(i => i.id == activeAssignLaporanId);
+              const updateData = { ...item, teknisi: namaTeknisi, status: 'proses' };
+
+              const res = await window.api.updateLaporan(activeAssignLaporanId, updateData);
+              if (res.success) {
+                showAlert('success', `Teknisi ${namaTeknisi} berhasil ditunjuk!`);
+                activeAssignLaporanId = null;
+                await loadDataTeknisi();
+                await loadDataLaporan("Pilih teknisi");
+              } else {
+                showAlert('error', 'Gagal menunjuk teknisi.');
+              }
+            } catch (err) {
+              console.error(err);
+              showAlert('error', 'Gagal menunjuk teknisi.');
+            }
+          }
+        });
+      });
+
+    } else {
+      container.innerHTML = '<div class="p-4 text-center text-slate-400 text-sm">Belum ada data teknisi.</div>';
+    }
+  } catch (err) {
+    console.error(err);
+    container.innerHTML = '<div class="p-4 text-center text-red-500 text-sm">Gagal memuat data teknisi.</div>';
+  }
+}
+

@@ -3,6 +3,9 @@ const router = express.Router();
 const { Laporan } = require('../models');
 const {Op} = require('sequelize');
 
+const path = require('path');
+const fs = require('fs');
+
 router.get('/', async (req, res) => {
     try {
         const dataLaporan = await Laporan.findAll({ order: [['id', 'DESC']] });

@@ -41,6 +41,17 @@
         ></p>
       </div>
 
+      <!-- Tanggal & Waktu Laporan Dibuat -->
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5"
+          >Tanggal & Waktu Laporan</label
+        >
+        <p
+          id="pilih-teknisi-tanggal-laporan"
+          class="text-sm font-medium text-slate-800 bg-slate-50 p-2.5 rounded-lg border border-slate-100"
+        >-</p>
+      </div>
+
       <div>
         <label
           for="select-pilih-teknisi"
@@ -53,6 +64,34 @@
         >
           <option value="">-- Memuat Teknisi --</option>
         </select>
+      </div>
+
+      <!-- Input Durasi (hari) -->
+      <div>
+        <label
+          for="input-durasi-hari"
+          class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5"
+          >Durasi Penyelesaian (Hari)</label
+        >
+        <input
+          type="number"
+          id="input-durasi-hari"
+          min="1"
+          max="365"
+          placeholder="Masukkan durasi dalam hari"
+          class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150"
+        />
+      </div>
+
+      <!-- Tenggat / Deadline (otomatis) -->
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5"
+          >Tenggat Penyelesaian</label
+        >
+        <p
+          id="pilih-teknisi-deadline"
+          class="text-sm font-medium text-slate-800 bg-amber-50 p-2.5 rounded-lg border border-amber-200"
+        >Isi durasi di atas untuk melihat tenggat</p>
       </div>
 
       <div class="flex items-center justify-end gap-2 border-t border-slate-100 pt-4 mt-6">

@@ -18,7 +18,9 @@ const api = {
 
   sendUser: (data) => ipcRenderer.invoke('send-user', data),
   getUser: (email, password) => ipcRenderer.invoke('get-user', email, password),
-  deleteUser: (id) => ipcRenderer.invoke('delete-user', id)
+  deleteUser: (id) => ipcRenderer.invoke('delete-user', id),
+
+  assignTeknisi: (data) => ipcRenderer.invoke('assign-teknisi', data)
 }
 
 // expose ke renderer

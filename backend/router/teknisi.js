@@ -3,6 +3,9 @@ const router = express.Router();
 const { Teknisi } = require('../models');
 const { Op } = require('sequelize');
 
+const path = require('path');
+const fs = require('fs');
+
 // GET all teknisi
 router.get('/', async (req, res) => {
     try {

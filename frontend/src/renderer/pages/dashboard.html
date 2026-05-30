@@ -23,63 +23,63 @@
     <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
       <div class="flex justify-between items-center mb-5">
         <div>
-          <p class="text-slate-400 text-sm">ACTIVE SERVERS</p>
+          <p class="text-slate-400 text-sm" id="card-servers-title">ACTIVE SERVERS</p>
 
-          <h2 class="text-5xl font-bold text-slate-800 mt-2">24</h2>
+          <h2 class="text-5xl font-bold text-slate-800 mt-2" id="card-servers-value">24</h2>
         </div>
 
         <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center">
-          <i class="fas fa-server text-blue-500 text-2xl"></i>
+          <i class="fas fa-server text-blue-500 text-2xl" id="card-servers-icon"></i>
         </div>
       </div>
 
       <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden">
-        <div class="bg-blue-500 h-full rounded-full w-[90%]"></div>
+        <div class="bg-blue-500 h-full rounded-full w-[90%]" id="card-servers-progress" style="width: 90%;"></div>
       </div>
 
-      <p class="text-green-500 text-sm mt-3 font-medium">+99% running normally</p>
+      <p class="text-green-500 text-sm mt-3 font-medium" id="card-servers-subtext">+99% running normally</p>
     </div>
 
     <!-- Card -->
     <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
       <div class="flex justify-between items-center mb-5">
         <div>
-          <p class="text-slate-400 text-sm">MAINTENANCE TASK</p>
+          <p class="text-slate-400 text-sm" id="card-tasks-title">MAINTENANCE TASK</p>
 
-          <h2 class="text-5xl font-bold text-slate-800 mt-2">03</h2>
+          <h2 class="text-5xl font-bold text-slate-800 mt-2" id="card-tasks-value">03</h2>
         </div>
 
         <div class="w-14 h-14 rounded-2xl bg-orange-100 flex items-center justify-center">
-          <i class="fas fa-tools text-orange-500 text-2xl"></i>
+          <i class="fas fa-tools text-orange-500 text-2xl" id="card-tasks-icon"></i>
         </div>
       </div>
 
       <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden">
-        <div class="bg-orange-500 h-full rounded-full w-[65%]"></div>
+        <div class="bg-orange-500 h-full rounded-full w-[65%]" id="card-tasks-progress" style="width: 65%;"></div>
       </div>
 
-      <p class="text-orange-500 text-sm mt-3 font-medium">Ongoing maintenance</p>
+      <p class="text-orange-500 text-sm mt-3 font-medium" id="card-tasks-subtext">Ongoing maintenance</p>
     </div>
 
     <!-- Card -->
     <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
       <div class="flex justify-between items-center mb-5">
         <div>
-          <p class="text-slate-400 text-sm">SYSTEM SECURITY</p>
+          <p class="text-slate-400 text-sm" id="card-security-title">SYSTEM SECURITY</p>
 
-          <h2 class="text-5xl font-bold text-slate-800 mt-2">SAFE</h2>
+          <h2 class="text-5xl font-bold text-slate-800 mt-2" id="card-security-value">SAFE</h2>
         </div>
 
         <div class="w-14 h-14 rounded-2xl bg-green-100 flex items-center justify-center">
-          <i class="fas fa-shield-alt text-green-500 text-2xl"></i>
+          <i class="fas fa-shield-alt text-green-500 text-2xl" id="card-security-icon"></i>
         </div>
       </div>
 
       <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden">
-        <div class="bg-green-500 h-full rounded-full w-full"></div>
+        <div class="bg-green-500 h-full rounded-full w-full" id="card-security-progress" style="width: 100%;"></div>
       </div>
 
-      <p class="text-green-500 text-sm mt-3 font-medium">All systems protected</p>
+      <p class="text-green-500 text-sm mt-3 font-medium" id="card-security-subtext">All systems protected</p>
     </div>
   </div>
 
@@ -97,42 +97,8 @@
         <i class="fas fa-sync-alt text-3xl text-blue-500 animate-spin"></i>
       </div>
 
-      <div class="space-y-6">
-        <div>
-          <div class="flex justify-between mb-2">
-            <span class="text-slate-700 font-medium"> Database Upgrade </span>
-
-            <span class="text-slate-500"> 80% </span>
-          </div>
-
-          <div class="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
-            <div class="bg-blue-500 h-full rounded-full w-[80%]"></div>
-          </div>
-        </div>
-
-        <div>
-          <div class="flex justify-between mb-2">
-            <span class="text-slate-700 font-medium"> Security Patch </span>
-
-            <span class="text-slate-500"> 20% </span>
-          </div>
-
-          <div class="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
-            <div class="bg-purple-500 h-full rounded-full w-[65%]"></div>
-          </div>
-        </div>
-
-        <div>
-          <div class="flex justify-between mb-2">
-            <span class="text-slate-700 font-medium"> Backup System </span>
-
-            <span class="text-slate-500"> 20% </span>
-          </div>
-
-          <div class="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
-            <div class="bg-green-500 h-full rounded-full w-[92%]"></div>
-          </div>
-        </div>
+      <div class="space-y-6" id="maintenance-progress-container">
+        <!-- Rendered dynamically -->
       </div>
     </div>
 
@@ -201,78 +167,32 @@
       <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5">
         <p class="text-slate-400 text-sm">TOTAL DAMAGE</p>
 
-        <h2 class="text-4xl font-bold text-slate-800 mt-2">248</h2>
+        <h2 class="text-4xl font-bold text-slate-800 mt-2" id="stat-total-damage">0</h2>
 
-        <p class="text-red-500 text-sm mt-2 font-medium">+12% increased this month</p>
+        <p class="text-red-500 text-sm mt-2 font-medium" id="stat-total-damage-subtext">Total seluruh laporan kerusakan</p>
       </div>
 
       <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5">
         <p class="text-slate-400 text-sm">FIXED ITEMS</p>
 
-        <h2 class="text-4xl font-bold text-slate-800 mt-2">198</h2>
+        <h2 class="text-4xl font-bold text-slate-800 mt-2" id="stat-fixed-items">0</h2>
 
-        <p class="text-green-500 text-sm mt-2 font-medium">Maintenance completed successfully</p>
+        <p class="text-green-500 text-sm mt-2 font-medium" id="stat-fixed-items-subtext">Laporan selesai diperbaiki</p>
       </div>
 
       <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5">
         <p class="text-slate-400 text-sm">CRITICAL ISSUES</p>
 
-        <h2 class="text-4xl font-bold text-slate-800 mt-2">35</h2>
+        <h2 class="text-4xl font-bold text-slate-800 mt-2" id="stat-critical-issues">0</h2>
 
-        <p class="text-orange-500 text-sm mt-2 font-medium">Require urgent replacement</p>
+        <p class="text-orange-500 text-sm mt-2 font-medium" id="stat-critical-issues-subtext">Kategori rusak berat</p>
       </div>
     </div>
 
     <!-- DIAGRAM BATANG -->
     <div class="bg-slate-50 rounded-3xl p-8 border border-slate-200">
-      <div class="flex items-end justify-between gap-5 h-80">
-        <div class="flex flex-col items-center w-full">
-          <div
-            class="bg-gradient-to-t from-blue-600 to-blue-400 w-full h-32 rounded-t-2xl shadow-lg hover:scale-105 transition"
-          ></div>
-          <span class="mt-4 font-semibold text-slate-700">Jan</span>
-          <span class="text-slate-400 text-sm">32</span>
-        </div>
-
-        <div class="flex flex-col items-center w-full">
-          <div
-            class="bg-gradient-to-t from-sky-600 to-sky-400 w-full h-52 rounded-t-2xl shadow-lg hover:scale-105 transition"
-          ></div>
-          <span class="mt-4 font-semibold text-slate-700">Feb</span>
-          <span class="text-slate-400 text-sm">56</span>
-        </div>
-
-        <div class="flex flex-col items-center w-full">
-          <div
-            class="bg-gradient-to-t from-cyan-600 to-cyan-400 w-full h-40 rounded-t-2xl shadow-lg hover:scale-105 transition"
-          ></div>
-          <span class="mt-4 font-semibold text-slate-700">Mar</span>
-          <span class="text-slate-400 text-sm">40</span>
-        </div>
-
-        <div class="flex flex-col items-center w-full">
-          <div
-            class="bg-gradient-to-t from-teal-600 to-teal-400 w-full h-72 rounded-t-2xl shadow-lg hover:scale-105 transition"
-          ></div>
-          <span class="mt-4 font-semibold text-slate-700">Apr</span>
-          <span class="text-slate-400 text-sm">72</span>
-        </div>
-
-        <div class="flex flex-col items-center w-full">
-          <div
-            class="bg-gradient-to-t from-indigo-600 to-indigo-400 w-full h-48 rounded-t-2xl shadow-lg hover:scale-105 transition"
-          ></div>
-          <span class="mt-4 font-semibold text-slate-700">Mei</span>
-          <span class="text-slate-400 text-sm">48</span>
-        </div>
-
-        <div class="flex flex-col items-center w-full">
-          <div
-            class="bg-gradient-to-t from-blue-700 to-cyan-500 w-full h-64 rounded-t-2xl shadow-lg hover:scale-105 transition"
-          ></div>
-          <span class="mt-4 font-semibold text-slate-700">Jun</span>
-          <span class="text-slate-400 text-sm">65</span>
-        </div>
+      <div class="flex items-end justify-between gap-5 h-80" id="dashboard-bar-chart">
+        <!-- Rendered dynamically -->
       </div>
     </div>
   </div>

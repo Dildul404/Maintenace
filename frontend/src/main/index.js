@@ -190,6 +190,20 @@ app.whenReady().then(() => {
     }
   })
 
+  // -----------------------------------------------------------------------
+  // API penunjukan (assign teknisi)
+  // -----------------------------------------------------------------------
+
+  ipcMain.handle('assign-teknisi', async (event, data) => {
+    try {
+      const response = await axios.post(`${url}penunjukan`, data)
+      return { success: true, data: response.data }
+    } catch (error) {
+      console.error('Error assigning teknisi:', error.message)
+      return { success: false, error: error.message }
+    }
+  })
+
   createWindow()
 
   app.on('activate', function () {

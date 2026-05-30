@@ -18,23 +18,13 @@ app.use('/teknisi', teknisi);
 const user = require('./router/user');
 app.use('/user', user);
 
+const penunjukan = require('./router/penunjukan');
+app.use('/penunjukan', penunjukan);
+
 const db = require('./models');
 
 app.get('/', (req, res) => {
     res.send('Server Express berjalan');
-});
-
-// Sync database menggunakan Sequelize CLI configuration
-db.sequelize.sync({ alter: true }).then(async () => {
-    console.log('Tabel database telah disinkronisasi melalui Sequelize CLI');
-    try {
-        await db.sequelize.query('DROP TABLE IF EXISTS barang');
-        console.log('Tabel barang telah dihapus (jika ada).');
-    } catch (e) {
-        console.error('Gagal menghapus tabel barang:', e);
-    }
-}).catch(err => {
-    console.error('Gagal sinkronisasi database:', err);
 });
 
 app.listen(3000, () => {
