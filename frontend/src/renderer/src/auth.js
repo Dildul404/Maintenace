@@ -46,6 +46,7 @@ export async function userLogin() {
 
   // Ambil data user dari database
   const user = await window.api.getUser(email, password)
+  console.log(user);
 
   // simpan ke store
   window.dataSession.setData('login', {
@@ -81,13 +82,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       loadPage("dashboard");
       await loadSidebar("admin-sidebar");
       initNavigation("dashboard");
-
-
     } else if (user.role === "user") {
       loadPage("daftar-laporan");
       await loadSidebar("user-sidebar");
       initNavigation("daftar-laporan");
-
+    } else if (user.role === "teknisi") {
+      loadPage("dashboard");
+      await loadSidebar("teknisi-sidebar");
+      initNavigation("dashboard");
     }
   }
 });

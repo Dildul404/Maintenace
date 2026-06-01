@@ -1,36 +1,83 @@
 const express = require('express');
 const router = express.Router();
-const { Penunjukan, Laporan } = require('../models');
+const { Penunjukan, Laporan, Teknisi } = require('../models');
 
-// POST - Simpan penunjukan teknisi + update laporan.teknisi
+// POST - Assign teknisi ke laporan
 router.post('/', async (req, res) => {
-    const { id_laporan, id_teknisi, nama_teknisi, awal, akhir } = req.body;
+    const { id_laporan, id_teknisi, awal, akhir } = req.body;
 
     try {
-        // 1. Buat data penunjukan
+        // Cari teknisi
+        const teknisi = await Teknisi.findByPk(id_teknisi);
+
+        if (!teknisi) {
+            return res.status(404).json({
+                success: false,
+                message: 'Teknisi tidak ditemukan'
+            });
+        }
+
+        // Simpan penunjukan
         const newPenunjukan = await Penunjukan.create({
             id_laporan,
             id_teknisi,
-            awal: awal || new Date(),
-            akhir: akhir || null
+            awal,
+            akhir,
+            status: 'berlangsung'
         });
 
-        // 2. Update teknisi di tabel laporan
+        // Update kolom teknisi pada laporan
         await Laporan.update(
-            { teknisi: nama_teknisi },
-            { where: { id: id_laporan } }
+            {
+                teknisi: teknisi.nama
+            },
+            {
+                where: {
+                    id: id_laporan
+                }
+            }
         );
 
         res.status(201).json({
             success: true,
-            message: 'Penunjukan teknisi berhasil disimpan',
+            message: 'Penunjukan berhasil dibuat',
             data: newPenunjukan
         });
+
     } catch (error) {
-        console.error('Error creating penunjukan:', error);
+        console.error(error);
+
         res.status(500).json({
             success: false,
-            message: 'Gagal menyimpan penunjukan',
+            error: error.message
+        });
+    }
+});
+
+// GET - Simpan penunjukan teknisi + update laporan.teknisi
+router.get('/', async (req, res) => {
+    try {
+        const data = await Penunjukan.findAll({
+            include: [
+                {
+                    model: Laporan,
+                    attributes: ['judul']
+                },
+                {
+                    model: Teknisi,
+                    attributes: ['nama']
+                }
+            ],
+            order: [['id', 'DESC']]
+        });
+
+        res.json({
+            success: true,
+            data
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
             error: error.message
         });
     }

@@ -34,6 +34,11 @@ module.exports = (sequelize, DataTypes) => {
     akhir: {
       type: DataTypes.DATE,
       allowNull: true
+    },
+    status: {
+      type: DataTypes.ENUM('berlangsung', 'dibatalkan', 'selesai'),
+      allowNull: false,
+      defaultValue: "berlangsung"
     }
   }, {
     sequelize,
@@ -41,6 +46,16 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'penunjukan',
     timestamps: false
   });
+
+  Penunjukan.associate = function (models) {
+    Penunjukan.belongsTo(models.Laporan, {
+      foreignKey: 'id_laporan'
+    });
+
+    Penunjukan.belongsTo(models.Teknisi, {
+      foreignKey: 'id_teknisi'
+    });
+  };
 
   return Penunjukan;
 };

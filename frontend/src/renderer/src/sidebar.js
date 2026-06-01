@@ -1,10 +1,11 @@
 // import
 import { loadPage } from "./page.js";
+import { hiddenBtn } from "./button.js";
 import { logout } from "./auth.js";
 import { loadComponent } from "./component.js";
 import { setupModal, setupDetailModal, setupPilihTeknisiModal, setupTeknisiModal, setupStatusModal } from "./modal.js";
 import { loadDataLaporan } from "./laporan.js";
-import { loadDataTeknisi } from "./teknisi.js";
+import { loadDataTeknisi, loadDataPenunjukan } from "./teknisi.js";
 import { loadDashboardData } from "./dashboard.js";
 
 const user = window.dataSession.getData('login');
@@ -79,6 +80,7 @@ export async function handlePage(page) {
         await loadDataLaporan("Detail", "Edit");
       } else if (user.role === "teknisi") {
         await loadDataLaporan("Detail");
+        hiddenBtn("btn-tambah-data");
       } else if (user.role === "user") {
         await loadDataLaporan("Detail");
       }
@@ -102,17 +104,23 @@ export async function handlePage(page) {
       await loadComponent("pilih-teknisi", "pilih-teknisi-popup");
       setupTeknisiModal();
       setupPilihTeknisiModal();
-      await loadDataTeknisi();
+      await loadDataTeknisi(true);
       await loadDataLaporan("Pilih teknisi");
       break;
 
     case "lihat-teknisi":
-      await loadComponent("list-teknisi", "list-teknisi");
-      await loadComponent("tabel-daftar", "tabel-daftar");
-      await loadDataTeknisi();
-      await loadDataLaporan("Detail");
+      await loadComponent("lihat-list-teknisi", "lihat-list-teknisi");
+      await loadComponent("tabel-penunjukan-laporan", "tabel-penunjukan-laporan");
+      await loadDataTeknisi(false);
+      await loadDataPenunjukan();
       break;
-      
+
+    case "tugas-teknisi":
+      await loadComponent("tabel-penunjukan-laporan", "tabel-penunjukan-laporan");
+      await loadDataPenunjukan(user.username);
+      setupDetailModal();
+      break;
+
     case "dashboard":
       dashboardLink();
       await loadDashboardData();

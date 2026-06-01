@@ -73,7 +73,7 @@ app.whenReady().then(() => {
   // -----------------------------------------------------------------------
   // API laporan
   // -----------------------------------------------------------------------
-  
+
   // IPC laporan (Kirim data ke backend)
   ipcMain.handle('send-laporan', async (event, data) => {
     try {
@@ -189,20 +189,38 @@ app.whenReady().then(() => {
       return { success: false, error: error.message }
     }
   })
-
-  // -----------------------------------------------------------------------
-  // API penunjukan (assign teknisi)
-  // -----------------------------------------------------------------------
-
-  ipcMain.handle('assign-teknisi', async (event, data) => {
+  
+  // ------------------------------------------------------------------------
+  // API penunjukan
+  // ------------------------------------------------------------------------
+  
+    ipcMain.handle('assign-teknisi', async (event, data) => {
+      try {
+        const response = await axios.post(`${url}penunjukan`, data)
+        return { success: true, data: response.data }
+      } catch (error) {
+        console.error('Error assigning teknisi:', error.message)
+        return { success: false, error: error.message }
+      }
+    })
+  
+  ipcMain.handle('get-penunjukan', async () => {
     try {
-      const response = await axios.post(`${url}penunjukan`, data)
-      return { success: true, data: response.data }
+      const response = await axios.get(`${url}penunjukan`);
+
+      return {
+        success: true,
+        data: response.data.data
+      };
     } catch (error) {
-      console.error('Error assigning teknisi:', error.message)
-      return { success: false, error: error.message }
+      console.error('Error fetching penunjukan:', error.message);
+
+      return {
+        success: false,
+        error: error.message
+      };
     }
-  })
+  });
 
   createWindow()
 

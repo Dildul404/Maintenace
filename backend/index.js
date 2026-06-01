@@ -21,8 +21,6 @@ app.use('/user', user);
 const penunjukan = require('./router/penunjukan');
 app.use('/penunjukan', penunjukan);
 
-const db = require('./models');
-
 app.get('/', (req, res) => {
     res.send('Server Express berjalan');
 });

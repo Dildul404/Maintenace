@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Teknisi } = require('../models');
+const { User, Teknisi } = require('../models');
 const { Op } = require('sequelize');
 
 const path = require('path');
@@ -19,47 +19,82 @@ router.get('/', async (req, res) => {
 
 // POST new teknisi
 router.post('/', async (req, res) => {
-    const { nama, kategori, foto } = req.body;
-    
+    const { nama, kategori, email, password, foto } = req.body;
+
     let photoPath = null;
 
     if (foto && foto.startsWith('data:image')) {
         const matches = foto.match(/^data:image\/([A-Za-z-+\/]+);base64,(.+)$/);
-        
+
         if (matches && matches.length === 3) {
             const ext = matches[1];
             const base64Data = matches[2];
             const buffer = Buffer.from(base64Data, 'base64');
-            
+
             const uploadDir = path.join(__dirname, '../assets/images');
-            
+
             if (!fs.existsSync(uploadDir)) {
                 fs.mkdirSync(uploadDir, { recursive: true });
             }
-            
+
             const fileName = `teknisi_${Date.now()}.${ext}`;
             const filePath = path.join(uploadDir, fileName);
-            
+
             try {
                 fs.writeFileSync(filePath, buffer);
-                photoPath = `assets/images/${fileName}`; 
+                photoPath = `assets/images/${fileName}`;
             } catch (err) {
                 console.error('Gagal menyimpan foto teknisi:', err);
             }
         }
     }
-    
+
     try {
+        // Cek email pada tabel users
+        const existingUser = await User.findOne({
+            where: { email }
+        });
+
+        if (existingUser) {
+            return res.status(400).json({
+                success: false,
+                message: 'Email sudah digunakan'
+            });
+        }
+
+        // Simpan teknisi
         const newTeknisi = await Teknisi.create({
             nama,
             kategori,
             foto: photoPath
         });
-        
-        res.status(201).json({ success: true, message: 'Teknisi berhasil disimpan', data: newTeknisi });
+
+        // Simpan user
+        const newUser = await User.create({
+            username: nama,
+            email,
+            password,
+            id_teknisi: newTeknisi.id,
+            role: 'teknisi'
+        });
+
+        res.status(201).json({
+            success: true,
+            message: 'Teknisi berhasil disimpan',
+            data: {
+                teknisi: newTeknisi,
+                user: newUser
+            }
+        });
+
     } catch (error) {
         console.error('Error creating teknisi:', error);
-        res.status(500).json({ success: false, message: 'Gagal menyimpan data teknisi', error: error.message });
+
+        res.status(500).json({
+            success: false,
+            message: 'Gagal menyimpan data teknisi',
+            error: error.message
+        });
     }
 });
 

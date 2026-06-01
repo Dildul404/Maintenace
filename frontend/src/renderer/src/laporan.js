@@ -26,7 +26,7 @@ export async function loadDataLaporan(...items) {
 
             response.data.forEach(item => {
                 if (verifikasi == 1) {
-                    
+
                 }
                 // Tentukan styling badge berdasarkan status & kategori
                 let statusBadge = '';
@@ -93,8 +93,13 @@ export async function loadDataLaporan(...items) {
                     const id = e.target.getAttribute('data-id');
                     const item = window.laporanData.find(i => i.id == id);
                     if (item) {
-                        if (typeof window.openModalEdit === 'function') {
-                            window.openModalEdit(item);
+                        if (item.status === "selesai") {
+                            showAlert('info', 'Laporan sudah selesai!');
+                            return;
+                        } else {
+                            if (typeof window.openModalEdit === 'function') {
+                                window.openModalEdit(item);
+                            }
                         }
                     }
                 } else if (e.target.classList.contains('btn-edit-status')) {
@@ -107,7 +112,13 @@ export async function loadDataLaporan(...items) {
                     }
                 } else if (e.target.classList.contains('btn-pilih-teknisi')) {
                     const id = e.target.getAttribute('data-id');
-                    openModalPilihTeknisi(id);
+                    const item = window.laporanData.find(i => i.id == id);
+                    if (item && item.status === "selesai") {
+                        showAlert('info', 'Laporan sudah di proses!');
+                        return;
+                    } else {
+                        openModalPilihTeknisi(id);
+                    }
                 } else if (e.target.classList.contains('btn-hapus')) {
                     const isConfirmed = await showConfirm('Apakah Anda yakin ingin menghapus data ini?');
                     if (isConfirmed) {
@@ -140,8 +151,8 @@ export async function loadDataLaporan(...items) {
 
 function verifikasi(tbody, verifikasi) {
     if (verifikasi == 1) {
-        
+
     } else if (verifikasi == 2) {
-        
+
     }
 }

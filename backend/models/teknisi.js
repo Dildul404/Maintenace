@@ -21,5 +21,16 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'Teknisi',
   });
+
+  Teknisi.associate = function (models) {
+    Teknisi.hasMany(models.Penunjukan, {
+      foreignKey: 'id_teknisi'
+    });
+
+    Teknisi.hasOne(models.User, {
+      foreignKey: 'id_teknisi'
+    });
+  };
+
   return Teknisi;
 };

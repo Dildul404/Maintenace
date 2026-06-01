@@ -17,10 +17,20 @@ module.exports = (sequelize, DataTypes) => {
     username: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
-    role: DataTypes.ENUM('admin', 'teknisi', 'user')
+    role: DataTypes.ENUM('admin', 'teknisi', 'user'),
+    id_teknisi: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    }
   }, {
     sequelize,
     modelName: 'User',
   });
+
+  User.associate = function (models) {
+    User.belongsTo(models.Teknisi, {
+      foreignKey: 'id_teknisi'
+    });
+  };
   return User;
 };

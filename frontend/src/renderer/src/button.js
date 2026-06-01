@@ -17,3 +17,7 @@ export function initButtons() {
     });
   });
 }
+
+export function hiddenBtn(id) {
+  document.getElementById(id).classList.add('hidden');
+}

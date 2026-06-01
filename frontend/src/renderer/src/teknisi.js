@@ -5,7 +5,7 @@ import { showAlert } from "./alert.js";
 import { showConfirm } from "./confirm.js";
 
 // export function
-export async function loadDataTeknisi() {
+export async function loadDataTeknisi(btn) {
   const container = document.getElementById('teknisi-list-container');
   if (!container) return;
 
@@ -41,16 +41,13 @@ export async function loadDataTeknisi() {
             </div>
           </div>
           <div class="flex items-center gap-1.5">
-            ${activeAssignLaporanId ? `
-              <button data-nama="${item.nama}" class="btn-tunjuk-teknisi bg-emerald-500 hover:bg-emerald-600 text-white text-[11px] px-2.5 py-1 rounded font-medium cursor-pointer transition">
-                Tunjuk
-              </button>
-            ` : `
+            ${btn == true ? `
               <button data-id="${item.id}" class="btn-hapus-teknisi text-gray-400 hover:text-red-500 p-1 rounded-full hover:bg-red-50 transition cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
               </button>
+            ` : `
             `}
           </div>
         `;
@@ -118,3 +115,154 @@ export async function loadDataTeknisi() {
   }
 }
 
+export async function loadDataPenunjukan(user) {
+  const table = document.querySelector('#tabel-penunjukan-laporan');
+  const tbody = table.querySelector('tbody');
+
+  try {
+    tbody.innerHTML = `
+            <tr>
+                <td colspan="5" class="text-center py-4 text-slate-500">
+                    Memuat data dari server...
+                </td>
+            </tr>
+        `;
+
+    const response = await window.api.getPenunjukan();
+
+    if (response.success && response.data) {
+      window.penunjukanData = response.data;
+
+      tbody.innerHTML = '';
+
+
+      response.data.forEach((item, index) => {
+        if (user != undefined) {
+          if (item.Teknisi?.nama == user) {
+            const tr = document.createElement('tr');
+
+            let statusBadge = '';
+            if (item.status === 'selesai') statusBadge = 'bg-emerald-100 text-emerald-800';
+            else if (item.status === 'berlangsung') statusBadge = 'bg-amber-100 text-amber-800';
+            else if (item.status === 'dibatalkan') statusBadge = 'bg-rose-100 text-rose-800';
+
+            tr.className = 'transition hover:bg-lime-50';
+
+            const awal = item.awal
+              ? new Date(item.awal).toLocaleString('id-ID')
+              : '-';
+
+            const akhir = item.akhir
+              ? new Date(item.akhir).toLocaleString('id-ID')
+              : '-';
+
+            tr.innerHTML = `
+                    <td class="px-4 py-3">
+                        ${index + 1}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        ${item.Laporan?.judul || '-'}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        ${item.Teknisi?.nama || '-'}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        ${awal}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        ${akhir}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        <span class="inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${statusBadge}">${item.status}</span>
+                    </td>
+                `;
+
+            tbody.appendChild(tr);
+          } else {
+            return
+          }
+        } else {
+          const tr = document.createElement('tr');
+
+          let statusBadge = '';
+          if (item.status === 'selesai') statusBadge = 'bg-emerald-100 text-emerald-800';
+          else if (item.status === 'berlangsung') statusBadge = 'bg-amber-100 text-amber-800';
+          else if (item.status === 'dibatalkan') statusBadge = 'bg-rose-100 text-rose-800';
+
+          tr.className = 'transition hover:bg-lime-50';
+
+          const awal = item.awal
+            ? new Date(item.awal).toLocaleString('id-ID')
+            : '-';
+
+          const akhir = item.akhir
+            ? new Date(item.akhir).toLocaleString('id-ID')
+            : '-';
+
+          tr.innerHTML = `
+                    <td class="px-4 py-3">
+                        ${index + 1}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        ${item.Laporan?.judul || '-'}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        ${item.Teknisi?.nama || '-'}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        ${awal}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        ${akhir}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        <span class="inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${statusBadge}">${item.status}</span>
+                    </td>
+                `;
+
+          tbody.appendChild(tr);
+        }
+      });
+
+      if (response.data.length === 0) {
+        tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="text-center py-4 text-slate-500">
+                            Tidak ada data penunjukan
+                        </td>
+                    </tr>
+                `;
+      }
+
+    } else {
+      tbody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="text-center py-4 text-red-500">
+                        Gagal memuat data penunjukan
+                    </td>
+                </tr>
+            `;
+    }
+
+  } catch (err) {
+    console.error(err);
+
+    tbody.innerHTML = `
+            <tr>
+                <td colspan="5" class="text-center py-4 text-red-500">
+                    Terjadi kesalahan koneksi
+                </td>
+            </tr>
+        `;
+  }
+}

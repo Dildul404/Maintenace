@@ -240,6 +240,22 @@ export function setupDetailModal() {
         const tglEl = document.getElementById('detail-tanggal');
         if (tglEl) tglEl.textContent = tanggalStr;
 
+        // Format tanggal selesai jika ada & status selesai
+        const tglSelesaiContainer = document.getElementById('detail-tanggal-selesai-container');
+        const tglSelesaiEl = document.getElementById('detail-tanggal-selesai');
+        if (tglSelesaiContainer && tglSelesaiEl) {
+            if (data.status === 'selesai') {
+                const rawSelesaiDate = data.updated_at || data.updatedAt;
+                const tanggalSelesaiStr = rawSelesaiDate ? new Date(rawSelesaiDate).toLocaleDateString('id-ID', {
+                    year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                }) : '-';
+                tglSelesaiEl.textContent = tanggalSelesaiStr;
+                tglSelesaiContainer.classList.remove('hidden');
+            } else {
+                tglSelesaiContainer.classList.add('hidden');
+            }
+        }
+
         const imgEl = document.getElementById('detail-foto');
         if (imgEl) {
             const imgSrc = data.foto && !data.foto.startsWith('http') && !data.foto.startsWith('data:image')
@@ -356,9 +372,16 @@ export function setupTeknisiModal() {
             modal.classList.add('hidden');
             modal.classList.remove('flex');
         }
+
         document.getElementById('form-tambah-teknisi').reset();
-        if (previewContainer) previewContainer.classList.add('hidden');
-        if (imgPreview) imgPreview.src = '';
+
+        if (previewContainer) {
+            previewContainer.classList.add('hidden');
+        }
+
+        if (imgPreview) {
+            imgPreview.src = '';
+        }
     }
 
     if (btnTambah) btnTambah.addEventListener('click', openModal);
@@ -370,35 +393,52 @@ export function setupTeknisiModal() {
     if (inputFoto) {
         inputFoto.addEventListener('change', function (e) {
             const file = e.target.files[0];
+
             if (file) {
                 const reader = new FileReader();
+
                 reader.onload = function (ev) {
-                    if (imgPreview) imgPreview.src = ev.target.result;
-                    if (previewContainer) previewContainer.classList.remove('hidden');
+                    if (imgPreview) {
+                        imgPreview.src = ev.target.result;
+                    }
+
+                    if (previewContainer) {
+                        previewContainer.classList.remove('hidden');
+                    }
                 };
+
                 reader.readAsDataURL(file);
             }
         });
     }
 
     const btnSimpan = document.getElementById('btn-simpan-teknisi');
+
     if (btnSimpan) {
         btnSimpan.addEventListener('click', async function () {
-            const namaVal = document.getElementById('input-teknisi-nama').value;
-            const kategoriVal = document.getElementById('input-teknisi-kategori').value;
+            const namaVal = document.getElementById('input-teknisi-nama').value.trim();
+            const emailVal = document.getElementById('input-teknisi-email').value.trim();
+            const passwordVal = document.getElementById('input-teknisi-password').value.trim();
+            const kategoriVal = document.getElementById('input-teknisi-kategori').value.trim();
 
-            if (!namaVal || !kategoriVal) {
-                showAlert('error', 'Nama dan Kategori wajib diisi!');
+            if (!namaVal || !emailVal || !passwordVal || !kategoriVal) {
+                showAlert(
+                    'error',
+                    'Nama, Email, Password, dan Kategori wajib diisi!'
+                );
                 return;
             }
 
             const data = {
                 nama: namaVal,
+                email: emailVal,
+                password: passwordVal,
                 kategori: kategoriVal,
                 foto: (imgPreview && imgPreview.src) || ''
             };
 
             const originalText = btnSimpan.innerHTML;
+
             btnSimpan.innerHTML = 'Menyimpan...';
             btnSimpan.disabled = true;
 
@@ -406,15 +446,28 @@ export function setupTeknisiModal() {
                 const response = await window.api.sendTeknisi(data);
 
                 if (response && response.success) {
-                    showAlert('success', 'Teknisi berhasil ditambahkan!');
+                    showAlert(
+                        'success',
+                        'Teknisi berhasil ditambahkan!'
+                    );
+
                     closeModal();
-                    await loadDataTeknisi(); // Reload list teknisi
+
+                    await loadDataTeknisi();
                 } else {
-                    showAlert('error', response.message || 'Gagal menyimpan teknisi ke database');
+                    showAlert(
+                        'error',
+                        response?.message ||
+                        'Gagal menyimpan teknisi ke database'
+                    );
                 }
             } catch (err) {
                 console.error(err);
-                showAlert('error', 'Gagal menyimpan data teknisi');
+
+                showAlert(
+                    'error',
+                    'Gagal menyimpan data teknisi'
+                );
             } finally {
                 btnSimpan.innerHTML = originalText;
                 btnSimpan.disabled = false;
@@ -504,7 +557,6 @@ export function setupPilihTeknisiModal() {
                 const penunjukanData = {
                     id_laporan: activeAssignLaporanIdForModal,
                     id_teknisi: parseInt(idTeknisi),
-                    nama_teknisi: selectVal,
                     awal: now.toISOString(),
                     akhir: deadline.toISOString()
                 };

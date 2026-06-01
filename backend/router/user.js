@@ -6,7 +6,7 @@ const { Op } = require('sequelize');
 // POST new user
 router.post('/', async (req, res) => {
     const { nama, email, password, role } = req.body;
-    
+
     try {
         const newUser = await User.create({
             nama,
@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {
             password,
             role
         });
-        
+
         res.status(201).json({ success: true, message: 'User berhasil disimpan', data: newUser });
     } catch (error) {
         console.error('Error creating user:', error);
@@ -25,16 +25,26 @@ router.post('/', async (req, res) => {
 // GET user by username or email
 router.get('/:email/:password', async (req, res) => {
     try {
-        const dataUser = await User.findOne({ 
+        const dataUser = await User.findOne({
             where: {
                 email: req.params.email,
                 password: req.params.password
             }
         });
-        res.json({ success: true, data: dataUser });
+
+        res.json({
+            success: true,
+            data: dataUser
+        });
+
     } catch (error) {
         console.error('Error fetching user:', error);
-        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+
+        res.status(500).json({
+            success: false,
+            message: 'Server error',
+            error: error.message
+        });
     }
 });
 

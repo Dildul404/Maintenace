@@ -15,12 +15,13 @@ const api = {
   sendTeknisi: (data) => ipcRenderer.invoke('send-teknisi', data),
   getTeknisi: () => ipcRenderer.invoke('get-teknisi'),
   deleteTeknisi: (id) => ipcRenderer.invoke('delete-teknisi', id),
+  assignTeknisi: (data) => ipcRenderer.invoke('assign-teknisi', data),
 
   sendUser: (data) => ipcRenderer.invoke('send-user', data),
   getUser: (email, password) => ipcRenderer.invoke('get-user', email, password),
   deleteUser: (id) => ipcRenderer.invoke('delete-user', id),
 
-  assignTeknisi: (data) => ipcRenderer.invoke('assign-teknisi', data)
+  getPenunjukan: () => ipcRenderer.invoke('get-penunjukan'),
 }
 
 // expose ke renderer
