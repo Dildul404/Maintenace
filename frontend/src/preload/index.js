@@ -22,6 +22,7 @@ const api = {
   deleteUser: (id) => ipcRenderer.invoke('delete-user', id),
 
   getPenunjukan: () => ipcRenderer.invoke('get-penunjukan'),
+  updatePenunjukan: (id, data) => ipcRenderer.invoke('update-penunjukan', id, data),
 }
 
 // expose ke renderer

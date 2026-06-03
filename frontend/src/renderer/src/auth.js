@@ -71,11 +71,24 @@ document.addEventListener('DOMContentLoaded', async () => {
   const auth = window.dataSession.getData('is-login');
 
   if (auth.login === false) {
+    // Jika user belum login
     await loadPage("login");
     document.getElementById("sidebar").classList.add("hidden");
     const loginBtn = document.getElementById("loginBtn");
     loginBtn.addEventListener("click", async () => {
       await userLogin();
+    });
+
+    // Register
+    document.getElementById("register-link").addEventListener("click", async () => {
+      await loadPage("register");
+      document.getElementById("register-btn").addEventListener("click", async () => {
+        await userRegister();
+      });
+
+      document.getElementById("login-link").addEventListener("click", async () => {
+        await loadPage("login");
+      });
     });
   } else {
     if (user.role === "admin") {

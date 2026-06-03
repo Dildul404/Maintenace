@@ -3,7 +3,7 @@ import { loadPage } from "./page.js";
 import { hiddenBtn } from "./button.js";
 import { logout } from "./auth.js";
 import { loadComponent } from "./component.js";
-import { setupModal, setupDetailModal, setupPilihTeknisiModal, setupTeknisiModal, setupStatusModal } from "./modal.js";
+import { setupModal, setupDetailModal, setupPilihTeknisiModal, setupTeknisiModal, setupStatusModal, setupModalDetailPenunjukan } from "./modal.js";
 import { loadDataLaporan } from "./laporan.js";
 import { loadDataTeknisi, loadDataPenunjukan } from "./teknisi.js";
 import { loadDashboardData } from "./dashboard.js";
@@ -112,13 +112,14 @@ export async function handlePage(page) {
       await loadComponent("lihat-list-teknisi", "lihat-list-teknisi");
       await loadComponent("tabel-penunjukan-laporan", "tabel-penunjukan-laporan");
       await loadDataTeknisi(false);
-      await loadDataPenunjukan();
+      await loadDataPenunjukan(null, false);
       break;
 
     case "tugas-teknisi":
       await loadComponent("tabel-penunjukan-laporan", "tabel-penunjukan-laporan");
-      await loadDataPenunjukan(user.username);
-      setupDetailModal();
+      await loadComponent("modal-edit-penunjukan", "modal-edit-penunjukan-container");
+      await loadDataPenunjukan(user.username, true);
+      setupModalDetailPenunjukan();
       break;
 
     case "dashboard":

@@ -222,6 +222,16 @@ app.whenReady().then(() => {
     }
   });
 
+  ipcMain.handle('update-penunjukan', async (event, id, data) => {
+    try {
+      const response = await axios.put(`${url}penunjukan/${id}`, data)
+      return { success: true, data: response.data }
+    } catch (error) {
+      console.error('Error updating penunjukan:', error.message)
+      return { success: false, error: error.message }
+    }
+  });
+
   createWindow()
 
   app.on('activate', function () {

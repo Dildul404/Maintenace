@@ -3,7 +3,7 @@ export let activeAssignLaporanIdForModal = null;
 
 // import
 import { loadDataLaporan } from "./laporan.js";
-import { loadDataTeknisi } from "./teknisi.js";
+import { loadDataTeknisi, loadDataPenunjukan } from "./teknisi.js";
 import { showAlert } from "./alert.js";
 
 // export func
@@ -306,6 +306,9 @@ export function setupStatusModal() {
             return;
         } else if (data.status === "selesai") {
             showAlert('info', 'Laporan sudah selesai!');
+            return;
+        } else if (data.status === "ditolak") {
+            showAlert('info', 'Laporan sudah ditolak!');
             return;
         }
         if (titleEl) titleEl.textContent = data.judul || '-';
@@ -638,4 +641,219 @@ export async function openModalPilihTeknisi(laporanId) {
     // Open modal
     modal.classList.remove('hidden');
     modal.classList.add('flex');
+}
+
+export function setupModalDetailPenunjukan() {
+    const modalDetail = document.getElementById('modal-edit-penunjukan');
+    const btnClose = document.getElementById('btn-close-detail-penunjukan');
+    const btnBatal = document.getElementById('btn-batal-status-tugas');
+    const btnSimpan = document.getElementById('btn-simpan-status-tugas');
+    const inputStatus = document.getElementById('input-status-tugas');
+
+    let currentPenunjukanId = null;
+
+    function closeDetailModalPenunjukan() {
+        if (modalDetail) {
+            modalDetail.classList.add('hidden');
+            modalDetail.classList.remove('flex');
+        }
+    }
+
+    if (btnClose) {
+        btnClose.addEventListener('click', closeDetailModalPenunjukan);
+    }
+    if (btnBatal) {
+        btnBatal.addEventListener('click', closeDetailModalPenunjukan);
+    }
+
+    if (btnSimpan) {
+        btnSimpan.addEventListener('click', async function () {
+            if (!currentPenunjukanId) return;
+
+            const newStatus = inputStatus.value;
+            const originalText = btnSimpan.innerHTML;
+
+            btnSimpan.innerHTML = 'Menyimpan...';
+            btnSimpan.disabled = true;
+
+            try {
+                const response = await window.api.updatePenunjukan(currentPenunjukanId, { status: newStatus });
+
+                if (response && response.success) {
+                    showAlert('success', 'Status tugas berhasil diperbarui!');
+                    closeDetailModalPenunjukan();
+                    const user = window.dataSession.getData('login');
+                    await loadDataPenunjukan(user ? user.username : undefined, true);
+                } else {
+                    showAlert('error', response?.error || 'Gagal memperbarui status tugas.');
+                }
+            } catch (err) {
+                console.error(err);
+                showAlert('error', 'Terjadi kesalahan saat menyimpan.');
+            } finally {
+                btnSimpan.innerHTML = originalText;
+                btnSimpan.disabled = false;
+            }
+        });
+    }
+
+    window.openModalDetailPenunjukan = function (data, penunjukanData) {
+        if (!modalDetail) return;
+
+        currentPenunjukanId = penunjukanData ? penunjukanData.id : null;
+        if (inputStatus && penunjukanData) {
+            inputStatus.value = penunjukanData.status || 'berlangsung';
+        }
+
+        const isEditable = !penunjukanData || penunjukanData.status === 'berlangsung';
+        if (inputStatus) {
+            inputStatus.disabled = !isEditable;
+        }
+        if (btnSimpan) {
+            btnSimpan.disabled = !isEditable;
+            if (isEditable) {
+                btnSimpan.className = "rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition-colors shadow-sm cursor-pointer";
+                btnSimpan.textContent = 'Simpan Status';
+            } else {
+                btnSimpan.className = "rounded-lg bg-gray-400 px-4 py-2.5 text-sm font-semibold text-white transition-colors cursor-not-allowed opacity-75";
+                btnSimpan.textContent = penunjukanData.status === 'sukses' ? 'Tugas Sukses' : 'Tugas Dibatalkan';
+            }
+        }
+
+        document.getElementById('detail-judul-penunjukan').textContent =
+            data.judul || '-';
+
+        document.getElementById('detail-deskripsi-penunjukan').textContent =
+            data.deskripsi || '-';
+
+        document.getElementById('detail-kategori-penunjukan').textContent =
+            data.kategori || '-';
+
+        document.getElementById('detail-teknisi-penunjukan').textContent =
+            data.teknisi || 'Belum ditugaskan';
+
+        // Status badge
+        const statusEl = document.getElementById('detail-status-penunjukan');
+
+        if (statusEl) {
+            statusEl.textContent = data.status || '-';
+
+            if (data.status === 'selesai') {
+                statusEl.className =
+                    'inline-block rounded-full bg-emerald-100 text-emerald-800 px-3 py-1 text-xs font-semibold tracking-wide uppercase';
+            } else if (data.status === 'proses') {
+                statusEl.className =
+                    'inline-block rounded-full bg-amber-100 text-amber-800 px-3 py-1 text-xs font-semibold tracking-wide uppercase';
+            } else if (data.status === 'ditolak') {
+                statusEl.className =
+                    'inline-block rounded-full bg-rose-100 text-rose-800 px-3 py-1 text-xs font-semibold tracking-wide uppercase';
+            } else {
+                statusEl.className =
+                    'inline-block rounded-full bg-gray-100 text-gray-800 px-3 py-1 text-xs font-semibold tracking-wide uppercase';
+            }
+        }
+
+        // Kategori badge
+        const catEl = document.getElementById('detail-kategori-penunjukan');
+
+        if (catEl) {
+            if (data.kategori === 'rusak ringan') {
+                catEl.className =
+                    'inline-block rounded-full bg-emerald-100 text-emerald-800 px-3 py-1 text-xs font-semibold tracking-wide uppercase';
+            } else if (data.kategori === 'rusak sedang') {
+                catEl.className =
+                    'inline-block rounded-full bg-amber-100 text-amber-800 px-3 py-1 text-xs font-semibold tracking-wide uppercase';
+            } else if (data.kategori === 'rusak berat') {
+                catEl.className =
+                    'inline-block rounded-full bg-rose-100 text-rose-800 px-3 py-1 text-xs font-semibold tracking-wide uppercase';
+            } else {
+                catEl.className =
+                    'inline-block rounded-full bg-gray-100 text-gray-800 px-3 py-1 text-xs font-semibold tracking-wide uppercase';
+            }
+        }
+
+        // Tanggal Masuk Laporan
+        const rawDate = data.createdAt || data.created_at;
+
+        const tanggalStr = rawDate
+            ? new Date(rawDate).toLocaleDateString('id-ID', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+              })
+            : '-';
+
+        const tglEl = document.getElementById('detail-tanggal-penunjukan');
+
+        if (tglEl) {
+            tglEl.textContent = tanggalStr;
+        }
+
+        // Tanggal Mulai Penunjukan
+        const rawAwalDate = penunjukanData ? penunjukanData.awal : null;
+        const awalStr = rawAwalDate
+            ? new Date(rawAwalDate).toLocaleDateString('id-ID', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+              })
+            : '-';
+        const awalEl = document.getElementById('detail-awal-penunjukan');
+        if (awalEl) {
+            awalEl.textContent = awalStr;
+        }
+
+        // Tanggal Akhir/Tenggat Penunjukan
+        const rawAkhirDate = penunjukanData ? penunjukanData.akhir : null;
+        const akhirStr = rawAkhirDate
+            ? new Date(rawAkhirDate).toLocaleDateString('id-ID', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+              })
+            : '-';
+        const akhirEl = document.getElementById('detail-akhir-penunjukan');
+        if (akhirEl) {
+            akhirEl.textContent = akhirStr;
+        }
+
+        // Format tanggal selesai jika ada & status selesai
+        const tglSelesaiContainer = document.getElementById('detail-tanggal-selesai-container-penunjukan');
+        const tglSelesaiEl = document.getElementById('detail-tanggal-selesai-penunjukan');
+        if (tglSelesaiContainer && tglSelesaiEl) {
+            if (data.status === 'selesai') {
+                const rawSelesaiDate = data.updated_at || data.updatedAt;
+                const tanggalSelesaiStr = rawSelesaiDate ? new Date(rawSelesaiDate).toLocaleDateString('id-ID', {
+                    year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                }) : '-';
+                tglSelesaiEl.textContent = tanggalSelesaiStr;
+                tglSelesaiContainer.classList.remove('hidden');
+            } else {
+                tglSelesaiContainer.classList.add('hidden');
+            }
+        }
+
+        // Foto
+        const imgEl = document.getElementById('detail-foto-penunjukan');
+
+        if (imgEl) {
+            const imgSrc =
+                data.foto &&
+                !data.foto.startsWith('http') &&
+                !data.foto.startsWith('data:image')
+                    ? `http://localhost:3000/${data.foto}`
+                    : data.foto || 'https://via.placeholder.com/400x200?text=No+Image';
+
+            imgEl.src = imgSrc;
+        }
+
+        modalDetail.classList.remove('hidden');
+        modalDetail.classList.add('flex');
+    };
 }

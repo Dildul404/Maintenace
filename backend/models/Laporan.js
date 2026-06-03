@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(100)
         },
         status: {
-            type: DataTypes.ENUM('menunggu', 'proses', 'selesai'),
+            type: DataTypes.ENUM('menunggu', 'proses', 'selesai','ditolak'),
             defaultValue: 'menunggu'
         },
         foto: {

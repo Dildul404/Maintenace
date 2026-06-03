@@ -115,9 +115,17 @@ export async function loadDataTeknisi(btn) {
   }
 }
 
-export async function loadDataPenunjukan(user) {
+export async function loadDataPenunjukan(user, btn) {
   const table = document.querySelector('#tabel-penunjukan-laporan');
+  const thead = table.querySelector('thead');
+  const trow = thead.querySelector('tr');
   const tbody = table.querySelector('tbody');
+
+  if (btn) {
+    trow.innerHTML += `
+        <th class="px-2 py-2 text-left font-semibold sm:px-3 sm:py-2.5 md:px-4 md:py-3 lg:px-6 lg:py-3.5">Aksi</th>
+        `;
+  }
 
   try {
     tbody.innerHTML = `
@@ -142,7 +150,7 @@ export async function loadDataPenunjukan(user) {
             const tr = document.createElement('tr');
 
             let statusBadge = '';
-            if (item.status === 'selesai') statusBadge = 'bg-emerald-100 text-emerald-800';
+            if (item.status === 'sukses') statusBadge = 'bg-emerald-100 text-emerald-800';
             else if (item.status === 'berlangsung') statusBadge = 'bg-amber-100 text-amber-800';
             else if (item.status === 'dibatalkan') statusBadge = 'bg-rose-100 text-rose-800';
 
@@ -180,6 +188,10 @@ export async function loadDataPenunjukan(user) {
                     <td class="px-4 py-3">
                         <span class="inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${statusBadge}">${item.status}</span>
                     </td>
+
+                    ${btn == true ? ` <td class="px-4 py-3">
+                        <button data-id="${item.id}" data-laporan-id="${item.id_laporan}" class="btn-detail-edit-laporan rounded-lg bg-lime-100 px-2 py-1 text-xs font-medium text-lime-700 transition hover:bg-lime-200 sm:px-3 sm:py-1.5 sm:text-sm cursor-pointer">Detail / Edit</button>
+                    </td>` : ``}
                 `;
 
             tbody.appendChild(tr);
@@ -190,7 +202,7 @@ export async function loadDataPenunjukan(user) {
           const tr = document.createElement('tr');
 
           let statusBadge = '';
-          if (item.status === 'selesai') statusBadge = 'bg-emerald-100 text-emerald-800';
+          if (item.status === 'sukses') statusBadge = 'bg-emerald-100 text-emerald-800';
           else if (item.status === 'berlangsung') statusBadge = 'bg-amber-100 text-amber-800';
           else if (item.status === 'dibatalkan') statusBadge = 'bg-rose-100 text-rose-800';
 
@@ -228,6 +240,10 @@ export async function loadDataPenunjukan(user) {
                     <td class="px-4 py-3">
                         <span class="inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${statusBadge}">${item.status}</span>
                     </td>
+
+                    ${btn == true ? ` <td class="px-4 py-3">
+                        <button data-id="${item.id}" data-laporan-id="${item.id_laporan}" class="btn-detail-edit-laporan rounded-lg bg-lime-100 px-2 py-1 text-xs font-medium text-lime-700 transition hover:bg-lime-200 sm:px-3 sm:py-1.5 sm:text-sm cursor-pointer">Detail / Edit</button>
+                    </td>` : ``}
                 `;
 
           tbody.appendChild(tr);
@@ -253,6 +269,26 @@ export async function loadDataPenunjukan(user) {
                 </tr>
             `;
     }
+
+    // Panggil API getLaporan
+    const responseLaporan = await window.api.getLaporan();
+    window.laporanData = (responseLaporan && responseLaporan.success) ? responseLaporan.data : [];
+
+    document.querySelectorAll(".btn-detail-edit-laporan").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        const btn = e.target.classList.contains('btn-detail-edit-laporan') ? e.target : e.target.closest('.btn-detail-edit-laporan');
+        const penunjukanId = btn.getAttribute('data-id');
+        const laporanId = btn.getAttribute('data-laporan-id');
+        console.log("laporanId:", laporanId, "penunjukanId:", penunjukanId);
+        const item = window.laporanData.find(i => i.id == laporanId);
+        const penunjukanItem = window.penunjukanData.find(p => p.id == penunjukanId);
+        if (item) {
+          if (typeof window.openModalDetailPenunjukan === 'function') {
+            window.openModalDetailPenunjukan(item, penunjukanItem);
+          }
+        }
+      });
+    });
 
   } catch (err) {
     console.error(err);

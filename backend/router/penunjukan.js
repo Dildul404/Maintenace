@@ -118,4 +118,51 @@ router.get('/laporan/:id_laporan', async (req, res) => {
     }
 });
 
+// PUT - Update status penunjukan (+ update status laporan jika status penunjukan selesai atau dibatalkan)
+router.put('/:id', async (req, res) => {
+    const { status } = req.body; // 'berlangsung', 'dibatalkan', 'selesai'
+
+    try {
+        const penunjukan = await Penunjukan.findByPk(req.params.id);
+        if (!penunjukan) {
+            return res.status(404).json({
+                success: false,
+                message: 'Penunjukan tidak ditemukan'
+            });
+        }
+
+        // Update status penunjukan
+        await penunjukan.update({ status });
+
+        // Update status laporan sesuai aturan:
+        // Jika selesai -> laporan status = 'selesai'
+        // Jika dibatalkan -> laporan status = 'ditolak'
+        let laporanStatus = null;
+        if (status === 'sukses') {
+            laporanStatus = 'selesai';
+        } else if (status === 'dibatalkan') {
+            laporanStatus = 'ditolak';
+        }
+
+        if (laporanStatus) {
+            await Laporan.update(
+                { status: laporanStatus },
+                { where: { id: penunjukan.id_laporan } }
+            );
+        }
+
+        res.json({
+            success: true,
+            message: 'Status penunjukan berhasil diperbarui',
+            data: penunjukan
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+});
+
 module.exports = router;

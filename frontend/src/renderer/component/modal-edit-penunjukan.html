@@ -1,0 +1,122 @@
+<div id="modal-edit-penunjukan"
+  class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4 sm:p-0 transition-opacity">
+  <div
+    class="card bg-white w-full max-w-3xl shadow-xl rounded-2xl overflow-hidden relative transform transition-all mx-4 md:mx-0">
+    <button id="btn-close-detail-penunjukan"
+      class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 bg-white/80 rounded-full p-2 cursor-pointer z-10 backdrop-blur-sm shadow-sm transition-colors hover:bg-gray-100">
+      <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <div class="grid grid-cols-1 md:grid-cols-2">
+      <!-- Sisi Kiri: Detail Laporan -->
+      <div class="border-r border-gray-100 flex flex-col">
+        <figure class="w-full h-48 bg-gray-100 relative overflow-hidden">
+          <img id="detail-foto-penunjukan" src="" alt="Foto Laporan"
+            class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+            onerror="this.src = 'https://via.placeholder.com/400x200?text=No+Image'" />
+        </figure>
+        <div class="card-body p-6 flex-1">
+          <h2 id="detail-judul-penunjukan" class="text-xl font-bold text-gray-800 mb-3 leading-tight">
+            Judul Laporan
+          </h2>
+
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span id="detail-kategori-penunjukan"
+              class="inline-block rounded-full bg-blue-100 text-blue-800 px-3 py-1 text-xs font-semibold tracking-wide uppercase">Kategori</span>
+            <span id="detail-status-penunjukan"
+              class="inline-block rounded-full bg-yellow-100 text-yellow-800 px-3 py-1 text-xs font-semibold tracking-wide uppercase">Status</span>
+          </div>
+
+          <div class="mb-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+            <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
+              Deskripsi Kerusakan
+            </h3>
+            <p id="detail-deskripsi-penunjukan" class="text-sm text-gray-700 leading-relaxed max-h-24 overflow-y-auto">
+              Deskripsi lengkap mengenai laporan kerusakan...
+            </p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 mb-2">
+            <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+              <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Teknisi</h3>
+              <p id="detail-teknisi-penunjukan" class="text-sm text-gray-800 font-medium">Nama Teknisi</p>
+            </div>
+            <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+              <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">
+                Tanggal Masuk Laporan
+              </h3>
+              <p id="detail-tanggal-penunjukan" class="text-sm text-gray-800 font-medium">-</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sisi Kanan: Form Update Status Tugas -->
+      <div class="p-6 flex flex-col justify-between bg-slate-50/50">
+        <div>
+          <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+            </svg>
+            Update Status Tugas
+          </h2>
+
+          <div class="mb-5">
+
+            <div class="bg-amber-50 p-3 rounded-lg border border-amber-100 mb-5">
+              <h3 class="text-xs font-bold text-amber-600 uppercase tracking-wider mb-1">Mulai Penunjukan</h3>
+              <p id="detail-awal-penunjukan" class="text-sm text-amber-900 font-semibold">-</p>
+            </div>
+
+            <div class="bg-rose-50 p-3 rounded-lg border border-rose-100 mb-5">
+              <h3 class="text-xs font-bold text-rose-600 uppercase tracking-wider mb-1">Tenggat Penunjukan</h3>
+              <p id="detail-akhir-penunjukan" class="text-sm text-rose-900 font-semibold">-</p>
+            </div>
+
+            <div id="detail-tanggal-selesai-container-penunjukan"
+              class="col-span-2 bg-emerald-50 p-3 rounded-lg border border-emerald-100 hidden mb-5">
+              <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-1">
+                Tanggal Selesai
+              </h3>
+              <p id="detail-tanggal-selesai-penunjukan" class="text-sm text-emerald-800 font-semibold">-</p>
+            </div>
+
+            <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
+              Status Jadwal/Tugas
+            </label>
+            <select id="input-status-tugas"
+              class="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-700 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-shadow">
+              <option value="berlangsung">Berlangsung</option>
+              <option value="sukses">Sukses</option>
+              <option value="dibatalkan">Dibatalkan</option>
+            </select>
+
+            <div class="mt-4 bg-blue-50/50 border border-blue-100 rounded-xl p-3.5">
+              <h4 class="text-xs font-bold text-blue-800 uppercase tracking-wider mb-1.5">Info Sinkronisasi Laporan</h4>
+              <ul class="text-xs text-blue-900/80 space-y-1 list-disc list-inside">
+                <li>Status tugas <strong>Selesai</strong> otomatis mengubah laporan menjadi <strong>Selesai</strong>.
+                </li>
+                <li>Status tugas <strong>Dibatalkan</strong> otomatis mengubah laporan menjadi <strong>Ditolak</strong>.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-gray-100">
+          <button id="btn-batal-status-tugas" type="button"
+            class="rounded-lg bg-gray-100 px-4 py-2.5 text-sm font-semibold text-gray-600 hover:bg-gray-200 transition-colors cursor-pointer">
+            Batal
+          </button>
+          <button id="btn-simpan-status-tugas" type="button"
+            class="rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition-colors shadow-sm cursor-pointer">
+            Simpan Status
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

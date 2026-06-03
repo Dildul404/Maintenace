@@ -32,7 +32,8 @@ export async function loadDataLaporan(...items) {
                 let statusBadge = '';
                 if (item.status === 'selesai') statusBadge = '<span class="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-800"><span class="h-1.5 w-1.5 rounded-full bg-emerald-600"></span>Selesai</span>';
                 else if (item.status === 'proses') statusBadge = '<span class="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800"><span class="h-1.5 w-1.5 rounded-full bg-amber-600"></span>Proses</span>';
-                else statusBadge = '<span class="inline-flex items-center gap-1 rounded-full bg-rose-100 px-2 py-0.5 text-xs font-medium text-rose-800"><span class="h-1.5 w-1.5 rounded-full bg-rose-600"></span>Menunggu</span>';
+                else if (item.status === 'ditolak') statusBadge = '<span class="inline-flex items-center gap-1 rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-800"><span class="h-1.5 w-1.5 rounded-full bg-red-600"></span>Ditolak</span>';
+                else if (item.status === 'menunggu') statusBadge = '<span class="inline-flex items-center gap-1 rounded-full bg-rose-100 px-2 py-0.5 text-xs font-medium text-rose-800"><span class="h-1.5 w-1.5 rounded-full bg-rose-600"></span>Menunggu</span>';
 
                 let catBadge = '';
                 if (item.kategori === 'rusak ringan') catBadge = 'bg-emerald-100 text-emerald-800';
@@ -96,6 +97,9 @@ export async function loadDataLaporan(...items) {
                         if (item.status === "selesai") {
                             showAlert('info', 'Laporan sudah selesai!');
                             return;
+                        } else if (item.status === "ditolak") {
+                            showAlert('info', 'Laporan sudah ditolak!');
+                            return;
                         } else {
                             if (typeof window.openModalEdit === 'function') {
                                 window.openModalEdit(item);
@@ -106,7 +110,11 @@ export async function loadDataLaporan(...items) {
                     const id = e.target.getAttribute('data-id');
                     const item = window.laporanData.find(i => i.id == id);
                     if (item) {
-                        if (typeof window.openModalStatus === 'function') {
+                        const user = window.dataSession.getData('login');
+                        if (user.role == "teknisi") {
+                            showAlert('info', 'Anda tidak memiliki akses untuk mengubah status laporan ini!');
+                            return;
+                        } else if (typeof window.openModalStatus === 'function') {
                             window.openModalStatus(item);
                         }
                     }
